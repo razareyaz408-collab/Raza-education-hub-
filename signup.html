@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Create Account - Raza Education Hub</title>
 
 <link rel="stylesheet" href="style.css">
 
 <style>
-
 body{
 display:flex;
 justify-content:center;
 align-items:center;
 height:100vh;
 background:#0b5d3f;
+margin:0;
+font-family:Arial,sans-serif;
 }
 
 .signup-box{
@@ -38,6 +38,7 @@ padding:14px;
 margin:10px 0;
 border:1px solid #ccc;
 border-radius:8px;
+box-sizing:border-box;
 }
 
 .signup-box button{
@@ -65,7 +66,6 @@ text-decoration:none;
 color:#0b5d3f;
 font-weight:bold;
 }
-
 </style>
 
 </head>
@@ -77,12 +77,13 @@ font-weight:bold;
 <h2>Create Account</h2>
 
 <form id="signupForm">
-  
+
 <input
 id="name"
 type="text"
 placeholder="Full Name"
 required>
+
 <input
 id="email"
 type="email"
@@ -108,55 +109,58 @@ Create Account
 </form>
 
 <p>
-
 Already have an account?
-
-<a href="login.html">
-Login
-</a>
-
+<a href="login.html">Login</a>
 </p>
 
 <p>
-
-<a href="index.html">
-⬅ Back To Home
-</a>
-
+<a href="index.html">⬅ Back To Home</a>
 </p>
+
+</div>
+
 <script type="module">
+
 import supabase from "./supabase.js";
 
 const form = document.getElementById("signupForm");
 
 form.addEventListener("submit", async (e) => {
-  e.preventDefault();
 
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  const confirmPassword = document.getElementById("confirmPassword").value;
+e.preventDefault();
 
-  if (password !== confirmPassword) {
-    alert("Passwords do not match");
-    return;
-  }
+const email = document.getElementById("email").value;
+const password = document.getElementById("password").value;
+const confirmPassword = document.getElementById("confirmPassword").value;
 
-  const { error } = await supabase.auth.signUp({
-    email,
-    password
-  });
+if(password !== confirmPassword){
 
-  if (error) {
-    alert("Signup Failed: " + error.message);
-  } else {
-    alert("Account Created Successfully! Please check your email for verification.");
-    window.location.href = "login.html";
-  }
+alert("Passwords do not match");
+return;
+
+}
+
+const { error } = await supabase.auth.signUp({
+
+email,
+password
+
+});
+
+if(error){
+
+alert(error.message);
+
+}else{
+
+alert("Account Created Successfully! Check your email.");
+window.location.href="login.html";
+
+}
+
 });
 
 </script>
-
-</div>
 
 </body>
 </html>
