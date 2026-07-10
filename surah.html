@@ -82,26 +82,37 @@ async function loadSurah(){
 try{
 
 const response = await fetch(
-`https://api.alquran.cloud/v1/surah/${id}/editions/quran-uthmani,en.asad`
+https://api.alquran.cloud/v1/surah/${id}/editions/quran-uthmani,ur.jalandhry,en.asad
 );
 
 const data = await response.json();
 
 const arabic = data.data[0];
-const english = data.data[1];
+const urdu = data.data[1];
+const english = data.data[2];
 
 document.getElementById("surahName").innerText =
 arabic.englishName;
 
-let html = "";
-
-for(let i=0;i<arabic.ayahs.length;i++){
-
 html += `
-<div style="margin-bottom:25px;">
-<div class="arabic">${arabic.ayahs[i].text}</div>
-<div class="translation">${english.ayahs[i].text}</div>
+<div style="margin-bottom:25px">
+
+<div class="arabic">
+${arabic.ayahs[i].text}
+</div>
+
+<div class="translation">
+<b>Urdu:</b><br>
+${urdu.ayahs[i].text}
+</div>
+
+<div class="translation">
+<b>English:</b><br>
+${english.ayahs[i].text}
+</div>
+
 <hr>
+
 </div>
 `;
 
