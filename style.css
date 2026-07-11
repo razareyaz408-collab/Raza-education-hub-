@@ -1,3 +1,4 @@
+
 /* ==========================
    RAZA EDUCATION HUB
 ========================== */
@@ -522,3 +523,113 @@ font-size:16px;
 color:#666;
 
 }
+
+/* =====================================
+   PREMIUM DESIGN V2 - PART 2
+=====================================*/
+
+/* ---------- Statistics ---------- */
+
+.stats{
+padding:80px 8%;
+background:#ffffff;
+}
+
+.stats .cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:25px;
+}
+
+.stats .card{
+text-align:center;
+padding:35px 20px;
+background:linear-gradient(135deg,#ffffff,#f5f5f5);
+border:1px solid #e8e8e8;
+}
+
+.stats .card h2{
+font-size:42px;
+color:#0b5d3f;
+margin-bottom:10px;
+}
+
+.stats .card p{
+font-size:17px;
+color:#555;
+}
+
+/* ---------- Search ---------- */
+
+.search-section{
+padding:80px 8%;
+text-align:center;
+background:#f8fafb;
+}
+
+.search-section h2{
+font-size:36px;
+margin-bottom:25px;
+color:#0b5d3f;
+}
+
+.search-box{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:12px;
+flex-wrap:wrap;
+}
+
+.search-box input{
+
+width:500px;
+max-width:100%;
+
+padding:16px 20px;
+
+border-radius:50px;
+
+border:2px solid #0b5d3f;
+
+font-size:16px;
+
+outline:none;
+
+}
+
+.search-box input:focus{
+
+box-shadow:0 0 15px rgba(11,93,63,.25);
+
+}
+
+.search-box button{
+
+padding:16px 30px;
+
+background:#0b5d3f;
+
+color:#fff;
+
+border:none;
+
+border-radius:50px;
+
+font-weight:600;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+.search-box button:hover{
+
+background:#178b66;
+
+transform:translateY(-3px);
+
+}
+
+/
