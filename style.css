@@ -322,3 +322,203 @@ background:#15805d;
 padding:60px 20px;
 
 }
+
+/* =====================================
+   PREMIUM DESIGN V2 - PART 1
+=====================================*/
+
+/* Smooth Scroll */
+
+html{
+scroll-behavior:smooth;
+}
+
+/* Body */
+
+body{
+
+background:#f4f7f6;
+
+font-family:'Poppins',sans-serif;
+
+color:#222;
+
+line-height:1.7;
+
+}
+
+/* Custom Scrollbar */
+
+::-webkit-scrollbar{
+
+width:10px;
+
+}
+
+::-webkit-scrollbar-track{
+
+background:#ececec;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+background:#0b5d3f;
+
+border-radius:20px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+background:#15805d;
+
+}
+
+/* Logo */
+
+.logo{
+
+display:flex;
+
+align-items:center;
+
+gap:10px;
+
+font-size:30px;
+
+font-weight:700;
+
+letter-spacing:.5px;
+
+}
+
+/* Navigation */
+
+nav{
+
+display:flex;
+
+align-items:center;
+
+gap:14px;
+
+flex-wrap:wrap;
+
+}
+
+nav a{
+
+padding:10px 16px;
+
+border-radius:10px;
+
+transition:.3s;
+
+font-size:15px;
+
+}
+
+nav a:hover{
+
+background:rgba(255,255,255,.15);
+
+transform:translateY(-2px);
+
+}
+
+/* Buttons */
+
+.login-btn,
+.signup-btn{
+
+transition:.3s;
+
+}
+
+.login-btn:hover,
+.signup-btn:hover{
+
+transform:translateY(-2px);
+
+box-shadow:0 8px 20px rgba(0,0,0,.2);
+
+}
+
+/* Hero */
+
+.hero{
+
+min-height:90vh;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+flex-direction:column;
+
+padding:80px 20px;
+
+background:linear-gradient(135deg,#0b5d3f,#178b66);
+
+}
+
+.hero h1{
+
+font-size:60px;
+
+font-weight:700;
+
+margin-bottom:20px;
+
+}
+
+.hero p{
+
+max-width:750px;
+
+font-size:20px;
+
+margin:auto;
+
+margin-bottom:35px;
+
+}
+
+/* Cards */
+
+.card{
+
+border-radius:18px;
+
+overflow:hidden;
+
+transition:.35s;
+
+}
+
+.card:hover{
+
+transform:translateY(-8px);
+
+box-shadow:0 15px 40px rgba(0,0,0,.15);
+
+}
+
+.card h3{
+
+font-size:22px;
+
+margin-bottom:12px;
+
+}
+
+.card p{
+
+font-size:16px;
+
+color:#666;
+
+}
