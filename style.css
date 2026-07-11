@@ -135,3 +135,43 @@ justify-content:center;
 }
 
 }
+
+/* HEADER UPDATE */
+
+header{
+position:sticky;
+top:0;
+left:0;
+z-index:999;
+box-shadow:0 4px 15px rgba(0,0,0,.15);
+}
+
+.logo span{
+font-size:30px;
+font-weight:700;
+}
+
+nav a{
+padding:8px 12px;
+border-radius:8px;
+transition:.3s;
+}
+
+nav a:hover{
+background:#ffffff20;
+}
+
+.signup-btn{
+background:#ffffff;
+color:#0b5d3f;
+padding:8px 15px;
+border-radius:6px;
+text-decoration:none;
+font-weight:bold;
+margin-left:8px;
+}
+
+.signup-btn:hover{
+background:#ffd700;
+color:#000;
+}
