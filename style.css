@@ -633,3 +633,203 @@ transform:translateY(-3px);
 }
 
 /
+
+/* =====================================
+   PREMIUM DESIGN V2 - PART 3
+======================================*/
+
+/* ===== Glass Cards ===== */
+
+.card{
+
+backdrop-filter:blur(12px);
+
+-webkit-backdrop-filter:blur(12px);
+
+background:rgba(255,255,255,.95);
+
+border:1px solid rgba(255,255,255,.25);
+
+}
+
+/* ===== Animation ===== */
+
+@keyframes fadeUp{
+
+0%{
+
+opacity:0;
+
+transform:translateY(40px);
+
+}
+
+100%{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+}
+
+.hero,
+.stats,
+.features,
+.search-section,
+.daily-section{
+
+animation:fadeUp .8s ease;
+
+}
+
+/* ===== Hero Button ===== */
+
+.hero-btn,
+.hero-btn2{
+
+box-shadow:0 10px 25px rgba(0,0,0,.15);
+
+}
+
+.hero-btn:hover,
+.hero-btn2:hover{
+
+transform:translateY(-5px) scale(1.05);
+
+}
+
+/* ===== Images ===== */
+
+.card img{
+
+width:100%;
+
+height:220px;
+
+object-fit:cover;
+
+border-radius:12px;
+
+margin-bottom:15px;
+
+}
+
+/* ===== Feature Icons ===== */
+
+.card h3{
+
+display:flex;
+
+align-items:center;
+
+gap:10px;
+
+}
+
+/* ===== Footer ===== */
+
+footer{
+
+background:linear-gradient(135deg,#063926,#0b5d3f);
+
+padding:70px 8%;
+
+color:white;
+
+text-align:center;
+
+}
+
+footer p{
+
+margin-top:15px;
+
+font-size:16px;
+
+opacity:.9;
+
+}
+
+/* ===== Social Icons ===== */
+
+.social-icons{
+
+display:flex;
+
+justify-content:center;
+
+gap:18px;
+
+margin-top:25px;
+
+flex-wrap:wrap;
+
+}
+
+.social-icons a{
+
+width:50px;
+
+height:50px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+background:white;
+
+color:#0b5d3f;
+
+border-radius:50%;
+
+text-decoration:none;
+
+font-size:22px;
+
+transition:.3s;
+
+}
+
+.social-icons a:hover{
+
+transform:translateY(-5px);
+
+background:#ffd700;
+
+}
+
+/* ===== Hover Effect ===== */
+
+.card::before{
+
+content:"";
+
+display:block;
+
+height:5px;
+
+background:#ffd700;
+
+border-radius:20px;
+
+margin:-20px -20px 20px -20px;
+
+}
+
+/* ===== Responsive ===== */
+
+@media(max-width:768px){
+
+.hero{
+
+padding:70px 20px;
+
+}
+
+.card{
+
+padding:18
