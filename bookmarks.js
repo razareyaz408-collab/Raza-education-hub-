@@ -1,53 +1,63 @@
-const bookmark = localStorage.getItem("bookmarkSurah");
-
 const list = document.getElementById("bookmarkList");
 
-if (bookmark) {
+let bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
 
-list.innerHTML = `
+if (bookmarks.length > 0) {
 
-<div class="card">
+  list.innerHTML = "";
 
-<h3>📖 Surah ${bookmark}</h3>
+  bookmarks.forEach((surahId) => {
 
-<a href="surah.html?id=${bookmark}" class="hero-btn">
+    list.innerHTML += `
 
-Open Surah
+      <div class="card">
 
-</a>
+        <h3>📖 Surah ${surahId}</h3>
 
-<br><br>
+        <a href="surah.html?id=${surahId}" class="hero-btn">
+          Open Surah
+        </a>
 
-<button id="removeBtn" class="hero-btn">
+        <br><br>
 
-❌ Remove Bookmark
+        <button class="hero-btn removeBtn" data-id="${surahId}">
+          ❌ Remove Bookmark
+        </button>
 
-</button>
+      </div>
 
-</div>
+    `;
 
-`;
+  });
 
-document.getElementById("removeBtn").addEventListener("click", () => {
+  document.querySelectorAll(".removeBtn").forEach((button) => {
 
-localStorage.removeItem("bookmarkSurah");
+    button.addEventListener("click", () => {
 
-location.reload();
+      const id = button.dataset.id;
 
-});
+      bookmarks = bookmarks.filter(item => item !== id);
+
+      localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
+
+      location.reload();
+
+    });
+
+  });
 
 } else {
 
-list.innerHTML = `
+  list.innerHTML = `
 
-<div class="card">
+    <div class="card">
 
-<h3>No Bookmark Found</h3>
+      <h3>No Bookmarks Found</h3>
 
-<p>You have not bookmarked any Surah yet.</p>
+      <p>You have not bookmarked any Surah yet.</p>
 
-</div>
+    </div>
 
-`;
+  `;
 
 }
