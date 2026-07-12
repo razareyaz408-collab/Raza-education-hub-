@@ -7,15 +7,31 @@ signOut
 
 onAuthStateChanged(auth, (user) => {
 
-if(user){
+if (user) {
 
-document.querySelector("h2").innerHTML =
+document.getElementById("welcome").innerHTML =
 "👋 Welcome " + (user.displayName || "Student");
 
-}else{
+} else {
 
-window.location.href="login.html";
+window.location.href = "login.html";
 
 }
 
 });
+
+const logoutBtn = document.getElementById("logoutBtn");
+
+if (logoutBtn) {
+
+logoutBtn.addEventListener("click", async () => {
+
+await signOut(auth);
+
+alert("Logout Successful");
+
+window.location.href = "login.html";
+
+});
+
+}
