@@ -23,6 +23,10 @@ onAuthStateChanged(auth, async (user) => {
 
   const studentRef = ref(database, "students/" + user.uid);
 
+const snapshot = await get(studentRef);
+
+if (!snapshot.exists()) {
+
   await set(studentRef, {
     name: user.displayName || "Student",
     email: user.email,
@@ -32,12 +36,13 @@ onAuthStateChanged(auth, async (user) => {
     quizScore: 85
   });
 
-  const snapshot = await get(studentRef);
+}
 
-  if (snapshot.exists()) {
+const newSnapshot = await get(studentRef);
 
-    const data = snapshot.val();
+  if (newSnapshot.exists()) {
 
+    const data = newSnapshot.val();
     document.getElementById("overallProgress").innerHTML =
       data.overallProgress + "%";
 
