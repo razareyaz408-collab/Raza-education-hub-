@@ -50,8 +50,15 @@ if (bookmarkBtn) {
 
   bookmarkBtn.addEventListener("click", () => {
 
-    localStorage.setItem("bookmarkSurah", id);
+    let bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
 
+if (!bookmarks.includes(id)) {
+    bookmarks.push(id);
+}
+
+localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
+
+alert("⭐ Surah Bookmarked Successfully!");
     alert("⭐ Surah Bookmarked Successfully!");
 
   });
