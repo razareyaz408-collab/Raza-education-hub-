@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Login | Raza Education Hub</title>
 
 <link rel="stylesheet" href="style.css">
 
 </head>
+
 <body>
 
 <header>
@@ -28,28 +32,31 @@
 
 <section class="features">
 
-<h2>🔐 Login</h2>
+<h2>Login</h2>
 
-<div class="card" style="max-width:500px;margin:auto;">
+<div class="card">
 
-<form>
+<form id="loginForm">
 
 <input
 type="email"
-placeholder="Email Address"
-required
-style="width:100%;padding:15px;margin-bottom:15px;">
+id="loginEmail"
+placeholder="Enter Email"
+required>
+
+<br><br>
 
 <input
 type="password"
-placeholder="Password"
-required
-style="width:100%;padding:15px;margin-bottom:20px;">
+id="loginPassword"
+placeholder="Enter Password"
+required>
+
+<br><br>
 
 <button
 type="submit"
-class="hero-btn"
-style="border:none;cursor:pointer;width:100%;">
+class="hero-btn">
 
 Login
 
@@ -59,7 +66,7 @@ Login
 
 <br>
 
-<p style="text-align:center;">
+<p>
 
 Don't have an account?
 
@@ -85,7 +92,8 @@ Create Account
 
 </footer>
 
-<script src="script.js"></script>
+<script type="module" src="login.js"></script>
 
 </body>
+
 </html>
