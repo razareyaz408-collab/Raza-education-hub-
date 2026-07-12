@@ -7,7 +7,8 @@ signOut
 
 import {
 ref,
-set
+set,
+get
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 onAuthStateChanged(auth, (user) => {
@@ -25,6 +26,26 @@ hadithProgress: 60,
 quizScore: 85
 }
 );
+
+const studentRef = ref(database, "students/" + user.uid);
+
+get(studentRef).then((snapshot) => {
+
+if (snapshot.exists()) {
+
+const data = snapshot.val();
+
+document.getElementById("overallProgress").innerHTML = data.overallProgress + "%";
+
+document.getElementById("quranProgress").innerHTML = data.quranProgress + "%";
+
+document.getElementById("hadithProgress").innerHTML = data.hadithProgress + "%";
+
+document.getElementById("quizScore").innerHTML = data.quizScore + "%";
+
+}
+
+});
   
 document.getElementById("welcome").innerHTML =
 "👋 Welcome " + (user.displayName || "Student");
