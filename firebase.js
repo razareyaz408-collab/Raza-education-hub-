@@ -10,6 +10,8 @@ apiKey: "AIzaSyCNoVNUVqolCBP5SgXEHVSxy0VkT4IBZ24",
 
 authDomain: "raza-education-hub.firebaseapp.com",
 
+databaseURL: "https://raza-education-hub-default-rtdb.asia-southeast1.firebasedatabase.app",
+  
 projectId: "raza-education-hub",
 
 storageBucket: "raza-education-hub.firebasestorage.app",
