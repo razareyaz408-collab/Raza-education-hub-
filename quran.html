@@ -17,7 +17,9 @@
 <header>
 
 <div class="logo">
+
 🕌 Raza Education Hub
+
 </div>
 
 <nav>
@@ -28,8 +30,6 @@
 
 <a href="hadith.html">📚 Hadith</a>
 
-<a href="makhzan.html">📘 Makhzan</a>
-
 </nav>
 
 </header>
@@ -38,92 +38,27 @@
 
 <h2>📖 Holy Quran</h2>
 
-<div class="card">
+<p style="text-align:center; margin-bottom:25px;">
 
-<h3>🔍 Search Surah</h3>
+Read the Holy Quran with Translation and Audio.
+
+</p>
 
 <input
 type="text"
-placeholder="Search Surah..."
-style="width:100%;padding:15px;margin-top:15px;">
+id="searchSurah"
+placeholder="🔍 Search Surah..."
+style="width:100%;padding:15px;border-radius:10px;border:1px solid #ccc;">
+
+<br><br>
+
+<div id="surahList" class="cards">
 
 </div>
 
 </section>
 
-<section class="features">
-
-<h2>📚 Quran Features</h2>
-
-<div class="cards">
-
-<div class="card">
-<h3>📖 Read Quran</h3>
-<p>Read all 114 Surahs.</p>
-</div>
-
-<div class="card">
-<h3>🔊 Audio</h3>
-<p>Listen to beautiful Quran recitation.</p>
-</div>
-
-<div class="card">
-<h3>🌍 Translation</h3>
-<p>Urdu, Hindi & English.</p>
-</div>
-
-<div class="card">
-<h3>📘 Tafseer</h3>
-<p>Understand every Surah.</p>
-</div>
-
-<div class="card">
-<h3>❤️ Bookmark</h3>
-<p>Save your favourite Surahs.</p>
-</div>
-
-<div class="card">
-<h3>📈 Reading Progress</h3>
-<p>Track your Quran journey.</p>
-</div>
-
-</div>
-
-</section>
-
-<section class="features">
-
-<h2>📑 Surah List</h2>
-
-<div class="cards">
-
-<div class="card"><h3>1. Al-Fatihah</h3></div>
-
-<div class="card"><h3>2. Al-Baqarah</h3></div>
-
-<div class="card"><h3>3. Aal-e-Imran</h3></div>
-
-<div class="card"><h3>4. An-Nisa</h3></div>
-
-<div class="card"><h3>5. Al-Ma'idah</h3></div>
-
-<div class="card"><h3>6. Al-An'am</h3></div>
-
-<p style="text-align:center;width:100%;margin-top:20px;">
-... Remaining Surahs will be added in the next parts.
-</p>
-
-</div>
-
-</section>
-
-<footer>
-
-<p>© 2026 Raza Education Hub</p>
-
-</footer>
-
-<script src="script.js"></script>
+<script type="module" src="quran.js"></script>
 
 </body>
 
