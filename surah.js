@@ -1,3 +1,15 @@
+import { auth, database } from "./firebase.js";
+
+import {
+onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+ref,
+get,
+update
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 
@@ -63,3 +75,39 @@ alert("⭐ Surah Bookmarked Successfully!");
   });
 
 }
+
+const completeBtn = document.getElementById("completeBtn");
+
+completeBtn.addEventListener("click", () => {
+
+onAuthStateChanged(auth, async (user) => {
+
+if (!user) return;
+
+const studentRef = ref(database, "students/" + user.uid);
+
+const snapshot = await get(studentRef);
+
+if (snapshot.exists()) {
+
+const data = snapshot.val();
+
+let progress = data.quranProgress + 1;
+
+if (progress > 100) progress = 100;
+
+await update(studentRef, {
+
+quranProgress: progress,
+
+overallProgress: progress
+
+});
+
+alert("✅ Progress Updated!");
+
+}
+
+});
+
+});
