@@ -9,7 +9,6 @@ if (bookmarks.length > 0) {
   bookmarks.forEach((surahId) => {
 
     list.innerHTML += `
-
       <div class="card">
 
         <h3>📖 Surah ${surahId}</h3>
@@ -25,7 +24,6 @@ if (bookmarks.length > 0) {
         </button>
 
       </div>
-
     `;
 
   });
@@ -49,7 +47,6 @@ if (bookmarks.length > 0) {
 } else {
 
   list.innerHTML = `
-
     <div class="card">
 
       <h3>No Bookmarks Found</h3>
@@ -57,7 +54,6 @@ if (bookmarks.length > 0) {
       <p>You have not bookmarked any Surah yet.</p>
 
     </div>
-
   `;
 
 }
