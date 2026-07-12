@@ -43,3 +43,17 @@ async function loadSurah() {
 }
 
 loadSurah();
+
+const bookmarkBtn = document.getElementById("bookmarkBtn");
+
+if (bookmarkBtn) {
+
+  bookmarkBtn.addEventListener("click", () => {
+
+    localStorage.setItem("bookmarkSurah", id);
+
+    alert("⭐ Surah Bookmarked Successfully!");
+
+  });
+
+}
