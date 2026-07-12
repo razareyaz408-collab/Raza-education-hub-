@@ -1,67 +1,53 @@
-const surahs = [
-
-"Al-Fatihah",
-
-"Al-Baqarah",
-
-"Aal-Imran",
-
-"An-Nisa",
-
-"Al-Ma'idah",
-
-"Al-An'am",
-
-"Al-A'raf",
-
-"Al-Anfal",
-
-"At-Tawbah",
-
-"Yunus"
-
-];
-
 const list = document.getElementById("surahList");
 
-function showSurahs(data){
+async function loadSurahs() {
 
-list.innerHTML="";
+    list.innerHTML = "<h3>Loading Surahs...</h3>";
 
-data.forEach((surah,index)=>{
+    try {
 
-list.innerHTML += `
+        const response = await fetch("https://api.alquran.cloud/v1/surah");
 
-<div class="card">
+        const data = await response.json();
 
-<h3>${index+1}. ${surah}</h3>
+        list.innerHTML = "";
 
-<a href="surah.html?id=${index+1}" class="hero-btn">
+        data.data.forEach((surah) => {
 
-Open
+            list.innerHTML += `
 
-</a>
+            <div class="card">
 
-</div>
+                <h3>${surah.number}. ${surah.englishName}</h3>
 
-`;
+                <h2>${surah.name}</h2>
 
-});
+                <p>${surah.englishNameTranslation}</p>
+
+                <p>${surah.revelationType}</p>
+
+                <p>${surah.numberOfAyahs} Ayahs</p>
+
+                <a href="surah.html?id=${surah.number}" class="hero-btn">
+                    Read Surah
+                </a>
+
+            </div>
+
+            `;
+
+        });
+
+    }
+
+    catch (error) {
+
+        list.innerHTML = "<h3>Failed to load Surahs.</h3>";
+
+        console.error(error);
+
+    }
 
 }
 
-showSurahs(surahs);
-
-document.getElementById("searchSurah").addEventListener("input",(e)=>{
-
-const value=e.target.value.toLowerCase();
-
-const filtered=surahs.filter(s=>
-
-s.toLowerCase().includes(value)
-
-);
-
-showSurahs(filtered);
-
-});
+loadSurahs();
