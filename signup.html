@@ -4,7 +4,6 @@
 <head>
 
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Create Account | Raza Education Hub</title>
@@ -18,9 +17,7 @@
 <header>
 
 <div class="logo">
-
 🕌 Raza Education Hub
-
 </div>
 
 <nav>
@@ -35,46 +32,39 @@
 
 <section class="features">
 
-<h2>Create Your Free Account</h2>
+<h2>Create Free Account</h2>
 
-<div class="card" style="max-width:550px;margin:auto;">
+<div class="card">
 
-<form>
+<form id="signupForm">
 
 <input
 type="text"
-placeholder="👤 Full Name"
-required
-style="width:100%;padding:15px;margin-bottom:15px;">
+id="name"
+placeholder="Full Name"
+required>
+
+<br><br>
 
 <input
 type="email"
-placeholder="📧 Email Address"
-required
-style="width:100%;padding:15px;margin-bottom:15px;">
+id="email"
+placeholder="Email Address"
+required>
 
-<input
-type="tel"
-placeholder="📱 Mobile Number"
-required
-style="width:100%;padding:15px;margin-bottom:15px;">
+<br><br>
 
 <input
 type="password"
-placeholder="🔒 Password"
-required
-style="width:100%;padding:15px;margin-bottom:15px;">
+id="password"
+placeholder="Password"
+required>
 
-<input
-type="password"
-placeholder="🔐 Confirm Password"
-required
-style="width:100%;padding:15px;margin-bottom:20px;">
+<br><br>
 
 <button
 type="submit"
-class="hero-btn"
-style="width:100%;border:none;cursor:pointer;">
+class="hero-btn">
 
 Create Account
 
@@ -82,15 +72,13 @@ Create Account
 
 </form>
 
-<br>
-
-<p style="text-align:center;">
+<p style="margin-top:20px;">
 
 Already have an account?
 
 <a href="login.html">
 
-Login Now
+Login Here
 
 </a>
 
@@ -110,7 +98,9 @@ Login Now
 
 </footer>
 
-<script src="script.js"></script>
+<script type="module" src="firebase.js"></script>
+
+<script type="module" src="script.js"></script>
 
 </body>
 
