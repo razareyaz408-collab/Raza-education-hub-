@@ -59,8 +59,7 @@ if (!bookmarks.includes(id)) {
 localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
 
 alert("⭐ Surah Bookmarked Successfully!");
-    alert("⭐ Surah Bookmarked Successfully!");
-
+    
   });
 
 }
