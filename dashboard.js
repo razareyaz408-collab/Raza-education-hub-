@@ -1,60 +1,55 @@
 import { auth, database } from "./firebase.js";
 
 import {
-onAuthStateChanged,
-signOut
+  onAuthStateChanged,
+  signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
-ref,
-set,
-get
+  ref,
+  set,
+  get
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
 
-if (user) {
+  if (!user) {
+    window.location.href = "login.html";
+    return;
+  }
 
-set(
-ref(database, "students/" + user.uid),
-{
-name: user.displayName,
-email: user.email,
-overallProgress: 35,
-quranProgress: 20,
-hadithProgress: 60,
-quizScore: 85
-}
-);
+  document.getElementById("welcome").innerHTML =
+    "👋 Welcome " + (user.displayName || "Student");
 
-const studentRef = ref(database, "students/" + user.uid);
+  const studentRef = ref(database, "students/" + user.uid);
 
-get(studentRef).then((snapshot) => {
+  await set(studentRef, {
+    name: user.displayName || "Student",
+    email: user.email,
+    overallProgress: 35,
+    quranProgress: 20,
+    hadithProgress: 60,
+    quizScore: 85
+  });
 
-if (snapshot.exists()) {
+  const snapshot = await get(studentRef);
 
-const data = snapshot.val();
+  if (snapshot.exists()) {
 
-document.getElementById("overallProgress").innerHTML = data.overallProgress + "%";
+    const data = snapshot.val();
 
-document.getElementById("quranProgress").innerHTML = data.quranProgress + "%";
+    document.getElementById("overallProgress").innerHTML =
+      data.overallProgress + "%";
 
-document.getElementById("hadithProgress").innerHTML = data.hadithProgress + "%";
+    document.getElementById("quranProgress").innerHTML =
+      data.quranProgress + "%";
 
-document.getElementById("quizScore").innerHTML = data.quizScore + "%";
+    document.getElementById("hadithProgress").innerHTML =
+      data.hadithProgress + "%";
 
-}
-
-});
-  
-document.getElementById("welcome").innerHTML =
-"👋 Welcome " + (user.displayName || "Student");
-
-} else {
-
-window.location.href = "login.html";
-
-}
+    document.getElementById("quizScore").innerHTML =
+      data.quizScore + "%";
+  }
 
 });
 
@@ -62,14 +57,14 @@ const logoutBtn = document.getElementById("logoutBtn");
 
 if (logoutBtn) {
 
-logoutBtn.addEventListener("click", async () => {
+  logoutBtn.addEventListener("click", async () => {
 
-await signOut(auth);
+    await signOut(auth);
 
-alert("Logout Successful");
+    alert("Logout Successful");
 
-window.location.href = "login.html";
+    window.location.href = "login.html";
 
-});
+  });
 
 }
