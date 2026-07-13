@@ -18,7 +18,7 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-alert(user.uid);
+// alert(user.uid);
   
 const admins = [
   "JEas0RgYp1MLSARWd3iMzHGuysW2",
