@@ -18,6 +18,8 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
+alert(user.uid);
+  
 if (user.uid !== "JEas0RgYp1MLSARWd3iMzHGuysW2") {
 
   alert("❌ Access Denied");
