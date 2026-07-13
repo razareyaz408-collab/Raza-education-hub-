@@ -846,40 +846,68 @@ color:white;
    DARK MODE
 =========================== */
 
-.dark-mode {
-    background: #121212;
-    color: #ffffff;
+body.dark-mode{
+    background:#121212;
+    color:#ffffff;
+    transition:0.3s;
 }
 
-.dark-mode header {
-    background: #0b3d2e;
+body.dark-mode header{
+    background:#063926;
 }
 
-.dark-mode .card {
-    background: #1f1f1f;
-    color: #ffffff;
-    border: 1px solid #444;
+body.dark-mode nav a{
+    color:#ffffff;
 }
 
-.dark-mode p,
-.dark-mode h1,
-.dark-mode h2,
-.dark-mode h3,
-.dark-mode a {
-    color: #ffffff;
+body.dark-mode .hero{
+    background:linear-gradient(135deg,#063926,#0b5d3f);
 }
 
-.dark-mode input {
-    background: #2b2b2b;
-    color: #ffffff;
-    border: 1px solid #666;
+body.dark-mode .features,
+body.dark-mode .stats,
+body.dark-mode .search-section,
+body.dark-mode .daily-section{
+    background:#121212;
 }
 
-.dark-mode .hero-btn {
-    background: #f4b400;
-    color: #000;
+body.dark-mode .card{
+    background:#1f1f1f;
+    color:#ffffff;
+    border:1px solid #333;
+    box-shadow:0 5px 15px rgba(255,255,255,.08);
 }
 
-.dark-mode audio {
-    filter: brightness(0.9);
-}   
+body.dark-mode .card h2,
+body.dark-mode .card h3,
+body.dark-mode p,
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3{
+    color:#ffffff;
+}
+
+body.dark-mode input{
+    background:#2b2b2b;
+    color:#ffffff;
+    border:1px solid #555;
+}
+
+body.dark-mode input::placeholder{
+    color:#cccccc;
+}
+
+body.dark-mode .hero-btn,
+body.dark-mode .hero-btn2{
+    background:#ffd700;
+    color:#000000;
+}
+
+body.dark-mode footer{
+    background:#063926;
+    color:#ffffff;
+}
+
+body.dark-mode audio{
+    filter:brightness(0.9);
+}
