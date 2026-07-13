@@ -63,6 +63,34 @@ const newSnapshot = await get(studentRef);
 
     document.getElementById("quizScore").innerHTML =
       data.quizScore + "%";
+
+  if (data.overallProgress >= 100) {
+
+  document.getElementById("achievement").innerHTML = "🥇 Gold";
+
+  document.getElementById("achievementText").innerHTML =
+    "Congratulations! You completed the course.";
+
+}
+
+else if (data.overallProgress >= 50) {
+
+  document.getElementById("achievement").innerHTML = "🥈 Silver";
+
+  document.getElementById("achievementText").innerHTML =
+    "Half course completed.";
+
+}
+
+else if (data.overallProgress >= 25) {
+
+  document.getElementById("achievement").innerHTML = "🥉 Bronze";
+
+  document.getElementById("achievementText").innerHTML =
+    "Great start! Keep learning.";
+
+    }
+    
   }
 
 });
