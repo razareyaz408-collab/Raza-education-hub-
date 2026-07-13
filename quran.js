@@ -80,33 +80,25 @@ searchBox.addEventListener("keyup", () => {
 
 const darkBtn = document.getElementById("darkModeBtn");
 
-const darkBtn = document.getElementById("darkModeBtn");
+if (darkBtn) {
 
-darkBtn.addEventListener("click", () => {
-    alert("Button Clicked");
-    document.body.classList.toggle("dark-mode");
-});
-
-// Load saved mode
-if (localStorage.getItem("darkMode") === "on") {
-  document.body.classList.add("dark-mode");
-  darkBtn.innerHTML = "☀️ Light Mode";
-}
-
-darkBtn.addEventListener("click", () => {
-
-  document.body.classList.toggle("dark-mode");
-
-  if (document.body.classList.contains("dark-mode")) {
-
-    localStorage.setItem("darkMode", "on");
+  if (localStorage.getItem("darkMode") === "on") {
+    document.body.classList.add("dark-mode");
     darkBtn.innerHTML = "☀️ Light Mode";
-
-  } else {
-
-    localStorage.setItem("darkMode", "off");
-    darkBtn.innerHTML = "🌙 Dark Mode";
-
   }
 
-});
+  darkBtn.addEventListener("click", () => {
+
+    document.body.classList.toggle("dark-mode");
+
+    if (document.body.classList.contains("dark-mode")) {
+      localStorage.setItem("darkMode", "on");
+      darkBtn.innerHTML = "☀️ Light Mode";
+    } else {
+      localStorage.setItem("darkMode", "off");
+      darkBtn.innerHTML = "🌙 Dark Mode";
+    }
+
+  });
+
+}
