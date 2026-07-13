@@ -79,6 +79,13 @@ async function loadSurah() {
 
         <p><b>Ayah ${ayah.numberInSurah}</b></p>
 
+        <button
+class="hero-btn playAyah"
+data-audio="${ayah.audio || ''}"
+style="margin-top:10px;">
+▶️ Play Ayah
+</button>
+
       </div>
       `;
 
