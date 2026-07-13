@@ -94,6 +94,32 @@ style="margin-top:10px;">
 
     document.getElementById("surahContent").innerHTML = html;
 
+    const ayahAudio = new Audio();
+
+document.querySelectorAll(".playAyah").forEach((button) => {
+
+  button.addEventListener("click", () => {
+
+    const audioUrl = button.dataset.audio;
+
+    if (!audioUrl) {
+
+      alert("Audio not available.");
+
+      return;
+
+    }
+
+    ayahAudio.pause();
+
+    ayahAudio.src = audioUrl;
+
+    ayahAudio.play();
+
+  });
+
+});
+
   } catch (error) {
 
     console.error(error);
