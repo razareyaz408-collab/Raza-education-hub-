@@ -11,18 +11,21 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const params = new URLSearchParams(window.location.search);
-const id = params.get("id");
+const id = Number(params.get("id")) || 1;
 
-// Save last opened Surah
+// Save Last Reading
 localStorage.setItem("lastSurah", id);
 
 async function loadSurah() {
 
   try {
 
+    document.getElementById("surahContent").innerHTML =
+      "<h3>Loading Surah...</h3>";
+
     const response = await fetch(
-  `https://api.alquran.cloud/v1/surah/${id}/editions/quran-uthmani,en.asad,ar.alafasy`
-);
+      `https://api.alquran.cloud/v1/surah/${id}/editions/quran-uthmani,en.asad,ar.alafasy`
+    );
 
     const result = await response.json();
 
@@ -30,11 +33,11 @@ async function loadSurah() {
     const english = result.data[1];
     const audio = result.data[2];
 
-    // Surah Title
+    // Title
     document.getElementById("surahTitle").innerHTML =
       `${arabic.englishName} (${arabic.name})`;
 
-    // Audio Player
+    // Full Surah Audio
     const audioPlayer = document.getElementById("audioPlayer");
 
     if (audioPlayer) {
@@ -44,23 +47,17 @@ async function loadSurah() {
 
       audioPlayer.load();
 
-      audioPlayer.addEventListener("error", () => {
-        console.log("Audio could not be loaded.");
-      });
+      audioPlayer.onended = () => {
 
-      audioPlayer.addEventListener("ended", () => {
+        if (id < 114) {
 
-  let next = parseInt(id) + 1;
+          window.location.href = `surah.html?id=${id + 1}`;
 
-  if (next <= 114) {
+        }
 
-    window.location.href = `surah.html?id=${next}`;
+      };
 
-   }
-
- });      
-    
-}
+    }
 
     // Ayahs
     let html = "";
@@ -74,18 +71,17 @@ async function loadSurah() {
           ${ayah.text}
         </h2>
 
-        <p style="margin-top:15px;color:#444;">
+        <p style="margin:15px 0;">
           ${english.ayahs[index].text}
         </p>
 
         <p><b>Ayah ${ayah.numberInSurah}</b></p>
 
         <button
-class="hero-btn playAyah"
-data-audio="${audio.ayahs[index].audio}"
-style="margin-top:10px;">
-▶️ Play Ayah
-</button>
+        class="hero-btn playAyah"
+        data-audio="${audio.ayahs[index].audio}">
+        ▶️ Play Ayah
+        </button>
 
       </div>
       `;
@@ -94,38 +90,34 @@ style="margin-top:10px;">
 
     document.getElementById("surahContent").innerHTML = html;
 
+    // Ayah Audio
+
     const ayahAudio = new Audio();
 
-document.querySelectorAll(".playAyah").forEach((button) => {
+    document.querySelectorAll(".playAyah").forEach(btn => {
 
-  button.addEventListener("click", () => {
+      btn.onclick = () => {
 
-    const audioUrl = button.dataset.audio;
+        ayahAudio.pause();
 
-    if (!audioUrl) {
+        ayahAudio.src = btn.dataset.audio;
 
-      alert("Audio not available.");
+        ayahAudio.play().catch(() => {
 
-      return;
+          alert("Audio unavailable.");
 
-    }
+        });
 
-    ayahAudio.pause();
+      };
 
-    ayahAudio.src = audioUrl;
+    });
 
-    ayahAudio.play();
+  } catch (e) {
 
-  });
-
-});
-
-  } catch (error) {
-
-    console.error(error);
+    console.error(e);
 
     document.getElementById("surahContent").innerHTML =
-      "<h3>Failed to load Surah.</h3>";
+      "<h3>❌ Failed to load Surah.</h3>";
 
   }
 
@@ -136,135 +128,105 @@ loadSurah();
 
 // Bookmark
 
-const bookmarkBtn = document.getElementById("bookmarkBtn");
+document.getElementById("bookmarkBtn")?.addEventListener("click", () => {
 
-if (bookmarkBtn) {
+  let bookmarks =
+    JSON.parse(localStorage.getItem("bookmarks")) || [];
 
-  bookmarkBtn.addEventListener("click", () => {
+  if (!bookmarks.includes(id)) {
 
-    let bookmarks =
-      JSON.parse(localStorage.getItem("bookmarks")) || [];
+    bookmarks.push(id);
 
-    if (!bookmarks.includes(id)) {
+    localStorage.setItem(
+      "bookmarks",
+      JSON.stringify(bookmarks)
+    );
 
-      bookmarks.push(id);
+    alert("⭐ Bookmarked Successfully");
 
-      localStorage.setItem(
-        "bookmarks",
-        JSON.stringify(bookmarks)
-      );
+  } else {
 
-      alert("⭐ Surah Bookmarked!");
+    alert("Already Bookmarked");
 
-    } else {
+  }
 
-      alert("Already Bookmarked!");
+});
+
+
+// Progress
+
+document.getElementById("completeBtn")?.addEventListener("click", () => {
+
+  onAuthStateChanged(auth, async (user) => {
+
+    if (!user) {
+
+      alert("Please Login First");
+
+      return;
 
     }
 
-  });
+    const studentRef =
+      ref(database, "students/" + user.uid);
 
-}
+    const snapshot = await get(studentRef);
 
+    if (!snapshot.exists()) return;
 
-// Progress Update
+    const data = snapshot.val();
 
-const completeBtn = document.getElementById("completeBtn");
+    const quranProgress =
+      Math.min((data.quranProgress || 0) + 1, 100);
 
-if (completeBtn) {
+    const overallProgress =
+      Math.min((data.overallProgress || 0) + 1, 100);
 
-  completeBtn.addEventListener("click", () => {
+    await update(studentRef, {
 
-    onAuthStateChanged(auth, async (user) => {
-
-      if (!user) {
-
-        alert("Please login first.");
-
-        return;
-
-      }
-
-      const studentRef =
-        ref(database, "students/" + user.uid);
-
-      const snapshot = await get(studentRef);
-
-      if (snapshot.exists()) {
-
-        const data = snapshot.val();
-
-        let quranProgress =
-          Number(data.quranProgress || 0);
-
-        let overallProgress =
-          Number(data.overallProgress || 0);
-
-        if (quranProgress < 100)
-          quranProgress++;
-
-        if (overallProgress < 100)
-          overallProgress++;
-
-        await update(studentRef, {
-
-          quranProgress: quranProgress,
-
-          overallProgress: overallProgress
-
-        });
-
-        alert("✅ Progress Updated Successfully!");
-
-      }
+      quranProgress,
+      overallProgress
 
     });
 
-  });
-
-                               }
-
-// Previous & Next Surah Buttons
-
-const prevBtn = document.getElementById("prevSurah");
-const nextBtn = document.getElementById("nextSurah");
-
-if (prevBtn) {
-
-  prevBtn.addEventListener("click", () => {
-
-    let prev = parseInt(id) - 1;
-
-    if (prev < 1) {
-
-      alert("This is the first Surah.");
-
-      return;
-
-    }
-
-    window.location.href = `surah.html?id=${prev}`;
+    alert("✅ Progress Updated");
 
   });
 
-}
+});
 
-if (nextBtn) {
 
-  nextBtn.addEventListener("click", () => {
+// Previous
 
-    let next = parseInt(id) + 1;
+document.getElementById("prevSurah")?.addEventListener("click", () => {
 
-    if (next > 114) {
+  if (id > 1) {
 
-      alert("This is the last Surah.");
+    window.location.href =
+      `surah.html?id=${id - 1}`;
 
-      return;
+  } else {
 
-    }
+    alert("This is the first Surah.");
 
-    window.location.href = `surah.html?id=${next}`;
+  }
 
-  });
+});
 
-}
+
+// Next
+
+document.getElementById("nextSurah")?.addEventListener("click", () => {
+
+  if (id < 114) {
+
+    window.location.href =
+      `surah.html?id=${id + 1}`;
+
+  } else {
+
+    alert("This is the last Surah.");
+
+  }
+
+});
