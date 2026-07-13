@@ -80,6 +80,8 @@ searchBox.addEventListener("keyup", () => {
 
 const darkBtn = document.getElementById("darkModeBtn");
 
+alert(darkBtn);
+
 // Load saved mode
 if (localStorage.getItem("darkMode") === "on") {
   document.body.classList.add("dark-mode");
