@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Read Surah | Raza Education Hub</title>
+<title>📖 Read Surah | Raza Education Hub</title>
 
 <link rel="stylesheet" href="style.css">
 
@@ -28,6 +28,8 @@
 
 <a href="dashboard.html">📊 Dashboard</a>
 
+<a href="bookmarks.html">⭐ Bookmarks</a>
+
 </nav>
 
 </header>
@@ -35,36 +37,44 @@
 <section class="features">
 
 <h2 id="surahTitle">
-
 Loading Surah...
-
 </h2>
+
+<br>
+
+<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
 
 <button id="bookmarkBtn" class="hero-btn">
 ⭐ Bookmark
 </button>
 
-<br><br>
-
-<audio id="audioPlayer" controls style="width:100%;"></audio>
-
-<br><br>
-  
-<br><br>
-
 <button id="completeBtn" class="hero-btn">
-
-✅ Mark as Completed
-
+✅ Mark Completed
 </button>
 
+</div>
+
 <br><br>
 
-<div style="display:flex;gap:15px;justify-content:center;flex-wrap:wrap;">
+<audio
+id="audioPlayer"
+controls
+preload="metadata"
+style="width:100%;">
+Your browser does not support audio.
+</audio>
+
+<br><br>
+
+<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
 
 <button id="prevSurah" class="hero-btn">
 ⬅ Previous
 </button>
+
+<a href="quran.html" class="hero-btn">
+📚 All Surahs
+</a>
 
 <button id="nextSurah" class="hero-btn">
 Next ➡
@@ -73,20 +83,26 @@ Next ➡
 </div>
 
 <br><br>
-  
-<br><br>
-  
-<div class="card">
 
 <div id="surahContent">
 
-Loading...
+<div class="card">
+
+<h3 style="text-align:center;">
+Loading Surah...
+</h3>
 
 </div>
 
 </div>
 
 </section>
+
+<footer>
+
+<p>© 2026 Raza Education Hub</p>
+
+</footer>
 
 <script type="module" src="surah.js"></script>
 
