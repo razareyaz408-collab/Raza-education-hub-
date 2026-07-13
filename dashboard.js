@@ -46,6 +46,9 @@ const newSnapshot = await get(studentRef);
     document.getElementById("overallProgress").innerHTML =
       data.overallProgress + "%";
 
+    document.getElementById("overallBar").style.width =
+  data.overallProgress + "%";
+
     document.getElementById("quranProgress").innerHTML =
       data.quranProgress + "%";
 
