@@ -1,22 +1,25 @@
 import { auth, database } from "./firebase.js";
 
 import {
-onAuthStateChanged
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
-ref,
-get,
-update
+  ref,
+  get,
+  update
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 
+// Save last opened Surah
 localStorage.setItem("lastSurah", id);
 
 async function loadSurah() {
+
   try {
+
     const response = await fetch(
       `https://api.alquran.cloud/v1/surah/${id}/editions/quran-uthmani,en.asad`
     );
@@ -26,49 +29,66 @@ async function loadSurah() {
     const arabic = result.data[0];
     const english = result.data[1];
 
+    // Surah Title
+    document.getElementById("surahTitle").innerHTML =
+      `${arabic.englishName} (${arabic.name})`;
+
+    // Audio Player
     const audioPlayer = document.getElementById("audioPlayer");
 
-audioPlayer.src =
-  `https://github.com/The-Quran-Project/Quran-Audio-Chapters/raw/refs/heads/main/Data/1/${id}.mp3`;
+    if (audioPlayer) {
 
-audioPlayer.load();
+      audioPlayer.src =
+        `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${id}.mp3`;
 
-  audioPlayer.addEventListener("error", () => {
-    alert("Audio failed to load");
-  });
-}
+      audioPlayer.load();
 
-    document.getElementById("surahTitle").innerHTML =
-      arabic.englishName + " (" + arabic.name + ")";
+      audioPlayer.addEventListener("error", () => {
+        console.log("Audio could not be loaded.");
+      });
 
+    }
+
+    // Ayahs
     let html = "";
 
     arabic.ayahs.forEach((ayah, index) => {
+
       html += `
-        <div class="card">
-          <h2 style="text-align:right;font-size:32px;line-height:2;">
-            ${ayah.text}
-          </h2>
+      <div class="card">
 
-          <p style="margin-top:15px;color:#444;">
-            ${english.ayahs[index].text}
-          </p>
+        <h2 style="text-align:right;font-size:32px;line-height:2;">
+          ${ayah.text}
+        </h2>
 
-          <p>Ayah ${ayah.numberInSurah}</p>
-        </div>
+        <p style="margin-top:15px;color:#444;">
+          ${english.ayahs[index].text}
+        </p>
+
+        <p><b>Ayah ${ayah.numberInSurah}</b></p>
+
+      </div>
       `;
+
     });
 
     document.getElementById("surahContent").innerHTML = html;
 
   } catch (error) {
+
     console.error(error);
+
     document.getElementById("surahContent").innerHTML =
-      "Failed to load Surah.";
+      "<h3>Failed to load Surah.</h3>";
+
   }
+
 }
 
 loadSurah();
+
+
+// Bookmark
 
 const bookmarkBtn = document.getElementById("bookmarkBtn");
 
@@ -76,55 +96,84 @@ if (bookmarkBtn) {
 
   bookmarkBtn.addEventListener("click", () => {
 
-    let bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
+    let bookmarks =
+      JSON.parse(localStorage.getItem("bookmarks")) || [];
 
-if (!bookmarks.includes(id)) {
-    bookmarks.push(id);
-}
+    if (!bookmarks.includes(id)) {
 
-localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
+      bookmarks.push(id);
 
-alert("⭐ Surah Bookmarked Successfully!");
-    
+      localStorage.setItem(
+        "bookmarks",
+        JSON.stringify(bookmarks)
+      );
+
+      alert("⭐ Surah Bookmarked!");
+
+    } else {
+
+      alert("Already Bookmarked!");
+
+    }
+
   });
 
 }
+
+
+// Progress Update
 
 const completeBtn = document.getElementById("completeBtn");
 
 if (completeBtn) {
 
   completeBtn.addEventListener("click", () => {
-onAuthStateChanged(auth, async (user) => {
 
-if (!user) return;
+    onAuthStateChanged(auth, async (user) => {
 
-const studentRef = ref(database, "students/" + user.uid);
+      if (!user) {
 
-const snapshot = await get(studentRef);
+        alert("Please login first.");
 
-if (snapshot.exists()) {
+        return;
 
-const data = snapshot.val();
+      }
 
-let progress = data.quranProgress + 1;
+      const studentRef =
+        ref(database, "students/" + user.uid);
 
-if (progress > 100) progress = 100;
+      const snapshot = await get(studentRef);
 
-await update(studentRef, {
+      if (snapshot.exists()) {
 
-quranProgress: progress,
+        const data = snapshot.val();
 
-overallProgress: progress
+        let quranProgress =
+          Number(data.quranProgress || 0);
 
-});
+        let overallProgress =
+          Number(data.overallProgress || 0);
 
-alert("✅ Progress Updated!");
+        if (quranProgress < 100)
+          quranProgress++;
 
-   }
+        if (overallProgress < 100)
+          overallProgress++;
+
+        await update(studentRef, {
+
+          quranProgress: quranProgress,
+
+          overallProgress: overallProgress
+
+        });
+
+        alert("✅ Progress Updated Successfully!");
+
+      }
+
+    });
 
   });
 
-});
-
-}
+                               }
