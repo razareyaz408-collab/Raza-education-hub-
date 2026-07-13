@@ -833,3 +833,45 @@ padding:70px 20px;
 .card{
 
 padding:18
+
+/* ===========================
+   DARK MODE
+=========================== */
+
+.dark-mode {
+    background: #121212;
+    color: #ffffff;
+}
+
+.dark-mode header {
+    background: #0b3d2e;
+}
+
+.dark-mode .card {
+    background: #1f1f1f;
+    color: #ffffff;
+    border: 1px solid #444;
+}
+
+.dark-mode p,
+.dark-mode h1,
+.dark-mode h2,
+.dark-mode h3,
+.dark-mode a {
+    color: #ffffff;
+}
+
+.dark-mode input {
+    background: #2b2b2b;
+    color: #ffffff;
+    border: 1px solid #666;
+}
+
+.dark-mode .hero-btn {
+    background: #f4b400;
+    color: #000;
+}
+
+.dark-mode audio {
+    filter: brightness(0.9);
+}   
