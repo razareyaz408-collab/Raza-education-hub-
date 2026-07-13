@@ -832,7 +832,15 @@ padding:70px 20px;
 
 .card{
 
-padding:18
+padding:18px;
+}
+
+}
+
+.dark-mode{
+background:#121212;
+color:white;
+}
 
 /* ===========================
    DARK MODE
