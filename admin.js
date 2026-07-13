@@ -78,5 +78,29 @@ if (user.uid !== "JEas0RgYp1MLSARWd3iMzHGuysW2") {
 
   document.getElementById("certificateCount").innerHTML = certificate;
 
+  const searchBox = document.getElementById("searchStudent");
+
+searchBox.addEventListener("keyup", () => {
+
+  const value = searchBox.value.toLowerCase();
+
+  const cards = document.querySelectorAll("#studentList .card");
+
+  cards.forEach((card) => {
+
+    if (card.innerText.toLowerCase().includes(value)) {
+
+      card.style.display = "block";
+
+    } else {
+
+      card.style.display = "none";
+
+    }
+
+  });
+
+});
+
 });
 
