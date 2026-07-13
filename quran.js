@@ -1,17 +1,22 @@
 const list = document.getElementById("surahList");
 
+// ==========================
+// Load All Surahs
+// ==========================
 async function loadSurahs() {
 
-    list.innerHTML = "<h3>Loading Surahs...</h3>";
+    if (!list) return;
+
+    list.innerHTML = "<h2>📖 Loading Surahs...</h2>";
 
     try {
 
         const response = await fetch("https://api.alquran.cloud/v1/surah");
-        const data = await response.json();
+        const result = await response.json();
 
         list.innerHTML = "";
 
-        data.data.forEach((surah) => {
+        result.data.forEach((surah) => {
 
             list.innerHTML += `
             <div class="card">
@@ -26,7 +31,9 @@ async function loadSurahs() {
 
                 <p>${surah.numberOfAyahs} Ayahs</p>
 
-                <a href="surah.html?id=${surah.number}" class="hero-btn">
+                <br>
+
+                <a class="hero-btn" href="surah.html?id=${surah.number}">
                     📖 Read Surah
                 </a>
 
@@ -35,10 +42,12 @@ async function loadSurahs() {
 
         });
 
-    } catch (error) {
+    } catch (err) {
 
-        console.error(error);
-        list.innerHTML = "<h3>Failed to load Surahs.</h3>";
+        console.error(err);
+
+        list.innerHTML =
+        "<h2>❌ Failed to load Surahs.</h2>";
 
     }
 
@@ -47,29 +56,24 @@ async function loadSurahs() {
 loadSurahs();
 
 
-// Search
+// ==========================
+// Search Surah
+// ==========================
 
 const searchBox = document.getElementById("searchSurah");
 
 if (searchBox) {
 
-    searchBox.addEventListener("keyup", () => {
+    searchBox.addEventListener("input", () => {
 
         const value = searchBox.value.toLowerCase();
 
-        const cards = document.querySelectorAll(".card");
+        document.querySelectorAll(".card").forEach((card) => {
 
-        cards.forEach((card) => {
-
-            if (card.innerText.toLowerCase().includes(value)) {
-
-                card.style.display = "block";
-
-            } else {
-
-                card.style.display = "none";
-
-            }
+            card.style.display =
+                card.innerText.toLowerCase().includes(value)
+                ? "block"
+                : "none";
 
         });
 
@@ -78,53 +82,72 @@ if (searchBox) {
 }
 
 
+// ==========================
 // Continue Reading
+// ==========================
 
-const continueBtn = document.getElementById("continueReading");
+const continueBtn =
+document.getElementById("continueReading");
 
 if (continueBtn) {
 
-    const last = localStorage.getItem("lastSurah");
+    const lastSurah =
+    localStorage.getItem("lastSurah") || "1";
 
-    if (last) {
-
-        continueBtn.href = `surah.html?id=${last}`;
-
-    } else {
-
-        continueBtn.href = "surah.html?id=1";
-
-    }
+    continueBtn.href =
+    `surah.html?id=${lastSurah}`;
 
 }
 
 
+// ==========================
 // Dark Mode
+// ==========================
 
-const darkBtn = document.getElementById("darkModeBtn");
+const darkBtn =
+document.getElementById("darkModeBtn");
+
+function enableDarkMode() {
+
+    document.body.classList.add("dark-mode");
+
+    if (darkBtn)
+        darkBtn.innerHTML = "☀️ Light Mode";
+
+    localStorage.setItem("darkMode", "on");
+
+}
+
+function disableDarkMode() {
+
+    document.body.classList.remove("dark-mode");
+
+    if (darkBtn)
+        darkBtn.innerHTML = "🌙 Dark Mode";
+
+    localStorage.setItem("darkMode", "off");
+
+}
+
+// Load Saved Theme
+
+if (localStorage.getItem("darkMode") === "on") {
+
+    enableDarkMode();
+
+}
 
 if (darkBtn) {
 
-    if (localStorage.getItem("darkMode") === "on") {
-
-        document.body.classList.add("dark-mode");
-        darkBtn.innerHTML = "☀️ Light Mode";
-
-    }
-
     darkBtn.addEventListener("click", () => {
-
-        document.body.classList.toggle("dark-mode");
 
         if (document.body.classList.contains("dark-mode")) {
 
-            localStorage.setItem("darkMode", "on");
-            darkBtn.innerHTML = "☀️ Light Mode";
+            disableDarkMode();
 
         } else {
 
-            localStorage.setItem("darkMode", "off");
-            darkBtn.innerHTML = "🌙 Dark Mode";
+            enableDarkMode();
 
         }
 
