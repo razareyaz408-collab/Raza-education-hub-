@@ -27,6 +27,14 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById("studentName").innerHTML =
       data.name;
 
+    const today = new Date();
+
+document.getElementById("certificateDate").innerHTML =
+today.toLocaleDateString();
+
+document.getElementById("certificateId").innerHTML =
+"REH-" + user.uid.substring(0,8).toUpperCase();
+
   }
 
 });
