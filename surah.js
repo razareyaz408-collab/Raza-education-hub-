@@ -177,3 +177,48 @@ if (completeBtn) {
   });
 
                                }
+
+// Previous & Next Surah Buttons
+
+const prevBtn = document.getElementById("prevSurah");
+const nextBtn = document.getElementById("nextSurah");
+
+if (prevBtn) {
+
+  prevBtn.addEventListener("click", () => {
+
+    let prev = parseInt(id) - 1;
+
+    if (prev < 1) {
+
+      alert("This is the first Surah.");
+
+      return;
+
+    }
+
+    window.location.href = `surah.html?id=${prev}`;
+
+  });
+
+}
+
+if (nextBtn) {
+
+  nextBtn.addEventListener("click", () => {
+
+    let next = parseInt(id) + 1;
+
+    if (next > 114) {
+
+      alert("This is the last Surah.");
+
+      return;
+
+    }
+
+    window.location.href = `surah.html?id=${next}`;
+
+  });
+
+}
