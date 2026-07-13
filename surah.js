@@ -78,8 +78,9 @@ alert("⭐ Surah Bookmarked Successfully!");
 
 const completeBtn = document.getElementById("completeBtn");
 
-completeBtn.addEventListener("click", () => {
+if (completeBtn) {
 
+  completeBtn.addEventListener("click", () => {
 onAuthStateChanged(auth, async (user) => {
 
 if (!user) return;
@@ -106,8 +107,10 @@ overallProgress: progress
 
 alert("✅ Progress Updated!");
 
+   }
+
+  });
+
+});
+
 }
-
-});
-
-});
