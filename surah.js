@@ -28,13 +28,10 @@ async function loadSurah() {
 
     const audioPlayer = document.getElementById("audioPlayer");
 
-if (audioPlayer) {
 audioPlayer.src =
-  `https://server8.mp3quran.net/afs/${String(id).padStart(3, "0")}.mp3`;
+  `https://github.com/The-Quran-Project/Quran-Audio-Chapters/raw/refs/heads/main/Data/1/${id}.mp3`;
 
 audioPlayer.load();
-
-  audioPlayer.load();
 
   audioPlayer.addEventListener("error", () => {
     alert("Audio failed to load");
