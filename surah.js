@@ -13,6 +13,8 @@ update
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 
+localStorage.setItem("lastSurah", id);
+
 async function loadSurah() {
   try {
     const response = await fetch(
