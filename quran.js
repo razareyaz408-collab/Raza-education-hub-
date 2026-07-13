@@ -7,7 +7,6 @@ async function loadSurahs() {
     try {
 
         const response = await fetch("https://api.alquran.cloud/v1/surah");
-
         const data = await response.json();
 
         list.innerHTML = "";
@@ -15,7 +14,6 @@ async function loadSurahs() {
         data.data.forEach((surah) => {
 
             list.innerHTML += `
-
             <div class="card">
 
                 <h3>${surah.number}. ${surah.englishName}</h3>
@@ -29,22 +27,18 @@ async function loadSurahs() {
                 <p>${surah.numberOfAyahs} Ayahs</p>
 
                 <a href="surah.html?id=${surah.number}" class="hero-btn">
-                    Read Surah
+                    📖 Read Surah
                 </a>
 
             </div>
-
             `;
 
         });
 
-    }
-
-    catch (error) {
-
-        list.innerHTML = "<h3>Failed to load Surahs.</h3>";
+    } catch (error) {
 
         console.error(error);
+        list.innerHTML = "<h3>Failed to load Surahs.</h3>";
 
     }
 
@@ -52,29 +46,58 @@ async function loadSurahs() {
 
 loadSurahs();
 
+
+// Search
+
 const searchBox = document.getElementById("searchSurah");
 
-searchBox.addEventListener("keyup", () => {
+if (searchBox) {
 
-  const value = searchBox.value.toLowerCase();
+    searchBox.addEventListener("keyup", () => {
 
-  const cards = document.querySelectorAll(".card");
+        const value = searchBox.value.toLowerCase();
 
-  cards.forEach((card) => {
+        const cards = document.querySelectorAll(".card");
 
-    if (card.innerText.toLowerCase().includes(value)) {
+        cards.forEach((card) => {
 
-      card.style.display = "block";
+            if (card.innerText.toLowerCase().includes(value)) {
+
+                card.style.display = "block";
+
+            } else {
+
+                card.style.display = "none";
+
+            }
+
+        });
+
+    });
+
+}
+
+
+// Continue Reading
+
+const continueBtn = document.getElementById("continueReading");
+
+if (continueBtn) {
+
+    const last = localStorage.getItem("lastSurah");
+
+    if (last) {
+
+        continueBtn.href = `surah.html?id=${last}`;
 
     } else {
 
-      card.style.display = "none";
+        continueBtn.href = "surah.html?id=1";
 
     }
 
-  });
+}
 
-});
 
 // Dark Mode
 
@@ -82,23 +105,29 @@ const darkBtn = document.getElementById("darkModeBtn");
 
 if (darkBtn) {
 
-  if (localStorage.getItem("darkMode") === "on") {
-    document.body.classList.add("dark-mode");
-    darkBtn.innerHTML = "☀️ Light Mode";
-  }
+    if (localStorage.getItem("darkMode") === "on") {
 
-  darkBtn.addEventListener("click", () => {
+        document.body.classList.add("dark-mode");
+        darkBtn.innerHTML = "☀️ Light Mode";
 
-    document.body.classList.toggle("dark-mode");
-
-    if (document.body.classList.contains("dark-mode")) {
-      localStorage.setItem("darkMode", "on");
-      darkBtn.innerHTML = "☀️ Light Mode";
-    } else {
-      localStorage.setItem("darkMode", "off");
-      darkBtn.innerHTML = "🌙 Dark Mode";
     }
 
-  });
+    darkBtn.addEventListener("click", () => {
+
+        document.body.classList.toggle("dark-mode");
+
+        if (document.body.classList.contains("dark-mode")) {
+
+            localStorage.setItem("darkMode", "on");
+            darkBtn.innerHTML = "☀️ Light Mode";
+
+        } else {
+
+            localStorage.setItem("darkMode", "off");
+            darkBtn.innerHTML = "🌙 Dark Mode";
+
+        }
+
+    });
 
 }
