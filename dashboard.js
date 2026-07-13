@@ -58,6 +58,9 @@ const newSnapshot = await get(studentRef);
     document.getElementById("hadithProgress").innerHTML =
       data.hadithProgress + "%";
 
+    document.getElementById("hadithBar").style.width =
+  data.hadithProgress + "%";
+
     document.getElementById("quizScore").innerHTML =
       data.quizScore + "%";
   }
