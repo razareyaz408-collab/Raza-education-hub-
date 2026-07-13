@@ -20,16 +20,16 @@ onAuthStateChanged(auth, async (user) => {
 
 alert(user.uid);
   
-if (user.uid !== "JEas0RgYp1MLSARWd3iMzHGuysW2") {
+const admins = [
+  "JEas0RgYp1MLSARWd3iMzHGuysW2",
+  "LpVegdIArPhzjuvTnTmjbJFAxxj1"
+];
 
+if (!admins.includes(user.uid)) {
   alert("❌ Access Denied");
-
   window.location.href = "dashboard.html";
-
   return;
-
 }
-
   const studentRef = ref(database, "students");
 
   const snapshot = await get(studentRef);
