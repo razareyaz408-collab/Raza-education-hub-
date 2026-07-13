@@ -31,6 +31,12 @@ async function loadSurah() {
 if (audioPlayer) {
   audioPlayer.src =
     `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${id}.mp3`;
+
+  audioPlayer.load();
+
+  audioPlayer.addEventListener("error", () => {
+    alert("Audio failed to load");
+  });
 }
 
     document.getElementById("surahTitle").innerHTML =
