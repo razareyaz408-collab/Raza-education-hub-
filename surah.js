@@ -47,7 +47,19 @@ async function loadSurah() {
         console.log("Audio could not be loaded.");
       });
 
-    }
+      audioPlayer.addEventListener("ended", () => {
+
+  let next = parseInt(id) + 1;
+
+  if (next <= 114) {
+
+    window.location.href = `surah.html?id=${next}`;
+
+   }
+
+ });      
+    
+}
 
     // Ayahs
     let html = "";
