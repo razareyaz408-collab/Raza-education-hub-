@@ -28,6 +28,7 @@ async function loadSurah() {
 
     const arabic = result.data[0];
     const english = result.data[1];
+    const audio = result.data[2];
 
     // Surah Title
     document.getElementById("surahTitle").innerHTML =
@@ -81,7 +82,7 @@ async function loadSurah() {
 
         <button
 class="hero-btn playAyah"
-data-audio="${ayah.audio || ''}"
+data-audio="${audio.ayahs[index].audio}"
 style="margin-top:10px;">
 ▶️ Play Ayah
 </button>
