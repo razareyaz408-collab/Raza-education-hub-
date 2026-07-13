@@ -21,8 +21,8 @@ async function loadSurah() {
   try {
 
     const response = await fetch(
-      `https://api.alquran.cloud/v1/surah/${id}/editions/quran-uthmani,en.asad`
-    );
+  `https://api.alquran.cloud/v1/surah/${id}/editions/quran-uthmani,en.asad,ar.alafasy`
+);
 
     const result = await response.json();
 
