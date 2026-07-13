@@ -51,3 +51,27 @@ async function loadSurahs() {
 }
 
 loadSurahs();
+
+const searchBox = document.getElementById("searchSurah");
+
+searchBox.addEventListener("keyup", () => {
+
+  const value = searchBox.value.toLowerCase();
+
+  const cards = document.querySelectorAll(".card");
+
+  cards.forEach((card) => {
+
+    if (card.innerText.toLowerCase().includes(value)) {
+
+      card.style.display = "block";
+
+    } else {
+
+      card.style.display = "none";
+
+    }
+
+  });
+
+});
