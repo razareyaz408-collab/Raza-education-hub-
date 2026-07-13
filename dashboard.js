@@ -52,6 +52,9 @@ const newSnapshot = await get(studentRef);
     document.getElementById("quranProgress").innerHTML =
       data.quranProgress + "%";
 
+    document.getElementById("quranBar").style.width =
+  data.quranProgress + "%";
+
     document.getElementById("hadithProgress").innerHTML =
       data.hadithProgress + "%";
 
