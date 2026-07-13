@@ -29,6 +29,16 @@ onAuthStateChanged(auth, async (user) => {
 
     const today = new Date();
 
+    if (data.overallProgress < 100) {
+
+  alert("❌ Complete 100% course to unlock your certificate.");
+
+  window.location.href = "dashboard.html";
+
+  return;
+
+    }
+
 document.getElementById("certificateDate").innerHTML =
 today.toLocaleDateString();
 
