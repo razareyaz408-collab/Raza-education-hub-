@@ -26,6 +26,13 @@ async function loadSurah() {
     const arabic = result.data[0];
     const english = result.data[1];
 
+    const audioPlayer = document.getElementById("audioPlayer");
+
+audioPlayer.src =
+  "https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/" +
+  id +
+  ".mp3";
+
     document.getElementById("surahTitle").innerHTML =
       arabic.englishName + " (" + arabic.name + ")";
 
