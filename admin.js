@@ -1,13 +1,36 @@
-import { database } from "./firebase.js";
+import { auth, database } from "./firebase.js";
 
 import {
   ref,
   get
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
+import {
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
 const studentRef = ref(database, "students");
 
-get(studentRef).then((snapshot) => {
+onAuthStateChanged(auth, async (user) => {
+
+  if (!user) {
+    window.location.href = "login.html";
+    return;
+  }
+
+if (user.uid !== "JEas0RgYp1MLSARWd3iMzHGuysW2") {
+
+  alert("❌ Access Denied");
+
+  window.location.href = "dashboard.html";
+
+  return;
+
+}
+
+  const studentRef = ref(database, "students");
+
+  const snapshot = await get(studentRef);
 
   if (!snapshot.exists()) {
 
@@ -37,19 +60,12 @@ get(studentRef).then((snapshot) => {
     if (student.overallProgress >= 100) certificate++;
 
     html += `
-
       <div class="card">
-
         <h3>👤 ${student.name}</h3>
-
         <p>📧 ${student.email}</p>
-
         <p>📖 Quran Progress: ${student.quranProgress}%</p>
-
         <p>📊 Overall Progress: ${student.overallProgress}%</p>
-
       </div>
-
     `;
 
   }
@@ -63,3 +79,4 @@ get(studentRef).then((snapshot) => {
   document.getElementById("certificateCount").innerHTML = certificate;
 
 });
+
