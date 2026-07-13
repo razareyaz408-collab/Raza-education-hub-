@@ -2,14 +2,12 @@
 <html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Holy Quran | Raza Education Hub</title>
 
 <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body>
@@ -17,21 +15,14 @@
 <header>
 
 <div class="logo">
-
 🕌 Raza Education Hub
-
 </div>
 
 <nav>
-
 <a href="index.html">🏠 Home</a>
-
 <a href="dashboard.html">📊 Dashboard</a>
-
 <a href="hadith.html">📚 Hadith</a>
-
 <a href="bookmarks.html">⭐ Bookmarks</a>
-  
 </nav>
 
 </header>
@@ -40,19 +31,17 @@
 
 <h2>📖 Holy Quran</h2>
 
-<br>
-
 <button id="darkModeBtn" class="hero-btn">
 🌙 Dark Mode
 </button>
 
-<br><br>  
+<br><br>
 
 <input
-type="text"
 id="searchSurah"
+type="text"
 placeholder="🔍 Search Surah..."
-style="width:100%;padding:12px;margin:20px 0;border:1px solid #ccc;border-radius:8px;">  
+class="search-input">
 
 <br><br>
 
@@ -60,17 +49,15 @@ style="width:100%;padding:12px;margin:20px 0;border:1px solid #ccc;border-radius
 📖 Continue Reading
 </a>
 
-<br><br>
-  
-<p style="text-align:center; margin-bottom:25px;">
-
-Read the Holy Quran with Translation and Audio.
-
+<p class="subtitle">
+Read the Holy Quran with Arabic, Translation and Audio.
 </p>
 
-<br><br>
-
 <div id="surahList" class="cards">
+
+<div class="loading">
+Loading Surahs...
+</div>
 
 </div>
 
@@ -79,5 +66,4 @@ Read the Holy Quran with Translation and Audio.
 <script type="module" src="quran.js"></script>
 
 </body>
-
 </html>
