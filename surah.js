@@ -1035,13 +1035,13 @@ localStorage.setItem(
 
 // Create Stats Card
 
-const statsCard = document.createElement("div");
+const advancedStatsCard = document.createElement("div");
 
-statsCard.className = "card";
+advancedStatsCard.className = "card";
 
-statsCard.style.marginTop = "20px";
+advancedStatsCard.style.marginTop = "20px";
 
-statsCard.innerHTML = `
+advancedStatsCard.innerHTML = `
 <h3 style="text-align:center;">
 📊 Reading Statistics
 </h3>
@@ -1055,7 +1055,7 @@ statsCard.innerHTML = `
 <b>${readingStats.completed.length}/114</b></p>
 `;
 
-surahContent.appendChild(statsCard);
+surahContent.appendChild(advancedStatsCard);
 
 // ======================
 // PART 55 (2/8)
