@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
@@ -43,7 +42,8 @@
 <h3>🔍 Search Hadith</h3>
 
 <input
-type="text"
+id="searchInput"
+type="search"
 placeholder="Search Hadith..."
 style="width:100%;padding:15px;margin-top:15px;">
 
@@ -55,47 +55,11 @@ style="width:100%;padding:15px;margin-top:15px;">
 
 <h2>📖 Learn Hadith</h2>
 
-<div class="cards">
+<div
+id="hadithList"
+class="cards">
 
-<div class="card">
-
-<h3>📚 40 Hadith</h3>
-
-<p>Start learning the famous 40 Hadith.</p>
-
-<a href="#" class="hero-btn">Open</a>
-
-</div>
-
-<div class="card">
-
-<h3>❤️ Daily Hadith</h3>
-
-<p>Read one authentic Hadith every day.</p>
-
-<a href="#" class="hero-btn">Read</a>
-
-</div>
-
-<div class="card">
-
-<h3>📝 Hadith Quiz</h3>
-
-<p>Test your knowledge after every lesson.</p>
-
-<a href="quiz.html" class="hero-btn">Start Quiz</a>
-
-</div>
-
-<div class="card">
-
-<h3>🏆 Course Certificate</h3>
-
-<p>Get a certificate after completing the course.</p>
-
-<a href="certificate.html" class="hero-btn">View</a>
-
-</div>
+<!-- Hadith Cards Automatically Load -->
 
 </div>
 
@@ -147,7 +111,7 @@ style="width:100%;padding:15px;margin-top:15px;">
 
 </footer>
 
-<script src="script.js"></script>
+<script src="hadith.js"></script>
 
 </body>
 </html>
