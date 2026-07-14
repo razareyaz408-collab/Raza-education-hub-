@@ -456,3 +456,96 @@ document.querySelector(".features")
 }
 
 console.log("✅ Hadith Reader Part 7 Loaded");
+
+// ======================================
+// PART 8
+// SEARCH + PRINT + EXPORT + LAST READ
+// ======================================
+
+// Search in Current Hadith
+const searchBox = document.createElement("input");
+
+searchBox.type = "search";
+searchBox.placeholder = "🔍 Search in Hadith...";
+searchBox.className = "search-box";
+searchBox.style.width = "100%";
+searchBox.style.margin = "20px 0";
+searchBox.style.padding = "12px";
+
+document.querySelector(".features")
+.prepend(searchBox);
+
+searchBox.addEventListener("input", () => {
+
+  const value = searchBox.value.toLowerCase();
+
+  [arabic, english, urdu].forEach(el => {
+
+    if (el.innerText.toLowerCase().includes(value)) {
+
+      el.style.background = "#fff3a0";
+
+    } else {
+
+      el.style.background = "transparent";
+
+    }
+
+  });
+
+});
+
+// Print Button
+const printBtn = document.createElement("button");
+
+printBtn.className = "hero-btn";
+printBtn.innerHTML = "🖨️ Print";
+
+printBtn.onclick = () => window.print();
+
+// Export Button
+const exportBtn = document.createElement("button");
+
+exportBtn.className = "hero-btn";
+exportBtn.innerHTML = "📄 Export";
+
+exportBtn.onclick = () => {
+
+  const text = `${title.innerText}
+
+${arabic.innerText}
+
+${english.innerText}
+
+${urdu.innerText}`;
+
+  const blob = new Blob([text], {
+    type: "text/plain"
+  });
+
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+
+  a.href = url;
+  a.download = `Hadith-${id}.txt`;
+
+  a.click();
+
+  URL.revokeObjectURL(url);
+
+};
+
+// Add Buttons
+document.getElementById("nextBtn")
+.insertAdjacentElement("afterend", printBtn);
+
+printBtn.insertAdjacentElement(
+"afterend",
+exportBtn
+);
+
+// Save Last Read
+localStorage.setItem("lastReadHadith", id);
+
+console.log("✅ Hadith Reader Part 8 Loaded");
