@@ -13,6 +13,9 @@ import {
 const params = new URLSearchParams(window.location.search);
 const id = Number(params.get("id")) || 1;
 
+const language =
+localStorage.getItem("translation") || "en.asad";
+
 // Save Last Reading
 localStorage.setItem("lastSurah", id);
 
@@ -24,8 +27,8 @@ async function loadSurah() {
       "<h3>Loading Surah...</h3>";
 
     const response = await fetch(
-      `https://api.alquran.cloud/v1/surah/${id}/editions/quran-uthmani,en.asad,ar.alafasy`
-    );
+  `https://api.alquran.cloud/v1/surah/${id}/editions/quran-uthmani,${language},ar.alafasy`
+);
 
     const result = await response.json();
 
@@ -218,6 +221,27 @@ document.getElementById("prevSurah")?.addEventListener("click", () => {
 
 document.getElementById("nextSurah")?.addEventListener("click", () => {
 
+// Translation Selector
+
+const languageSelect = document.getElementById("languageSelect");
+
+if (languageSelect) {
+
+  languageSelect.value = language;
+
+  languageSelect.addEventListener("change", () => {
+
+    localStorage.setItem(
+      "translation",
+      languageSelect.value
+    );
+
+    location.reload();
+
+  });
+
+}
+  
   if (id < 114) {
 
     window.location.href =
