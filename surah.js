@@ -448,3 +448,109 @@ function shareAyah(text) {
   }
 
 }
+
+function shareAyah(text) {
+
+  if (navigator.share) {
+
+    navigator.share({
+
+      title: "Holy Quran",
+      text: text
+
+    }).catch(() => {});
+
+  } else {
+
+    copyAyah(text);
+
+  }
+
+}
+
+// ======================
+// PART 52 (3/4)
+// ACTIVATE COPY & SHARE
+// ======================
+
+document.addEventListener("click", (e) => {
+
+  if (e.target.classList.contains("copyAyah")) {
+    copyAyah(e.target.dataset.text);
+  }
+
+  if (e.target.classList.contains("shareAyah")) {
+    shareAyah(e.target.dataset.text);
+  }
+
+});
+
+window.addEventListener("load", () => {
+
+  setTimeout(() => {
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+
+  }, 300);
+
+});
+
+localStorage.setItem(
+  "lastVisit",
+  new Date().toLocaleString()
+);
+
+// ======================
+// PART 52 (4/4)
+// FAVOURITE AYAH + SHORTCUTS
+// ======================
+
+const favouriteAyahs =
+JSON.parse(localStorage.getItem("favouriteAyahs")) || [];
+
+// Keyboard Shortcuts
+document.addEventListener("keydown", (e) => {
+
+  // Right Arrow = Next Surah
+  if (e.key === "ArrowRight" && id < 114) {
+    location.href = `surah.html?id=${id + 1}`;
+  }
+
+  // Left Arrow = Previous Surah
+  if (e.key === "ArrowLeft" && id > 1) {
+    location.href = `surah.html?id=${id - 1}`;
+  }
+
+});
+
+// Welcome Message
+console.log("📖 Raza Education Hub Quran Loaded Successfully");
+
+// Save Reading History
+let history =
+JSON.parse(localStorage.getItem("readingHistory")) || [];
+
+history.unshift({
+
+  surah: id,
+
+  date: new Date().toLocaleString()
+
+});
+
+// Keep only last 20 records
+history = history.slice(0, 20);
+
+localStorage.setItem(
+  "readingHistory",
+  JSON.stringify(history)
+);
+
+// ======================
+// END OF SURAH.JS
+// ======================
+
+console.log("✅ surah.js Loaded Successfully");
