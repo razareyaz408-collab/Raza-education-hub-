@@ -219,6 +219,13 @@ function renderAyahs() {
             📤 Share
           </button>
 
+          <button
+class="hero-btn favAyah"
+data-number="${ayah.numberInSurah}"
+data-text="${ayah.text}">
+⭐ Favourite
+</button>
+
         </div>
 
       </div>
@@ -688,3 +695,402 @@ if (id === 114) {
 loadSurah();
 
 console.log("✅ surah.js v2 Loaded Successfully"); 
+
+// ======================================
+// PART 54 (1/8)
+// FAVOURITE AYAH SYSTEM
+// ======================================
+
+function toggleFavouriteAyah(ayahNumber, ayahText) {
+
+  let favourites =
+    JSON.parse(localStorage.getItem("favouriteAyahs")) || [];
+
+  const index = favourites.findIndex(
+
+    item => item.number === ayahNumber
+
+  );
+
+  if (index === -1) {
+
+    favourites.push({
+
+      surah: id,
+
+      number: ayahNumber,
+
+      text: ayahText,
+
+      savedAt: new Date().toLocaleString()
+
+    });
+
+    alert("⭐ Ayah added to favourites.");
+
+  } else {
+
+    favourites.splice(index, 1);
+
+    alert("🗑️ Ayah removed from favourites.");
+
+  }
+
+  localStorage.setItem(
+
+    "favouriteAyahs",
+
+    JSON.stringify(favourites)
+
+  );
+
+}
+
+// ======================================
+// PART 54 (2/8)
+// ACTIVATE FAVOURITE BUTTONS
+// ======================================
+
+document.addEventListener("click", (e) => {
+
+  if (!e.target.classList.contains("favAyah")) return;
+
+  const ayahNumber =
+    Number(e.target.dataset.number);
+
+  const ayahText =
+    e.target.dataset.text;
+
+  toggleFavouriteAyah(
+    ayahNumber,
+    ayahText
+  );
+
+});
+
+// ======================================
+// PART 54 (4/8)
+// SHOW FAVOURITE COUNT
+// ======================================
+
+function updateFavouriteCount() {
+
+  const favourites =
+    JSON.parse(localStorage.getItem("favouriteAyahs")) || [];
+
+  let badge =
+    document.getElementById("favCount");
+
+  if (!badge) {
+
+    badge = document.createElement("div");
+
+    badge.id = "favCount";
+
+    badge.className = "card";
+
+    badge.style.textAlign = "center";
+    badge.style.margin = "15px 0";
+
+    surahTitle.insertAdjacentElement(
+      "afterend",
+      badge
+    );
+
+  }
+
+  badge.innerHTML =
+    `⭐ Favourite Ayahs: <b>${favourites.length}</b>`;
+
+}
+
+updateFavouriteCount();
+
+document.addEventListener("click", (e) => {
+
+  if (e.target.classList.contains("favAyah")) {
+
+    setTimeout(updateFavouriteCount, 200);
+
+  }
+
+});
+
+// ======================================
+// PART 54 (5/8)
+// FAVOURITE PAGE SHORTCUT
+// ======================================
+
+const favButton = document.createElement("button");
+
+favButton.className = "hero-btn";
+favButton.style.margin = "10px";
+favButton.innerHTML = "⭐ View Favourite Ayahs";
+
+favButton.addEventListener("click", () => {
+
+  location.href = "favourites.html";
+
+});
+
+const favCount = document.getElementById("favCount");
+
+if (favCount) {
+
+  favCount.insertAdjacentElement(
+    "afterend",
+    favButton
+  );
+
+}
+
+// ======================================
+// PART 54 (6/8)
+// EXPORT FAVOURITES
+// ======================================
+
+const exportBtn = document.createElement("button");
+
+exportBtn.className = "hero-btn";
+exportBtn.style.margin = "10px";
+exportBtn.innerHTML = "📤 Export Favourites";
+
+exportBtn.addEventListener("click", () => {
+
+  const favourites =
+    JSON.parse(localStorage.getItem("favouriteAyahs")) || [];
+
+  if (favourites.length === 0) {
+
+    alert("No favourite Ayahs found.");
+    return;
+
+  }
+
+  const data = JSON.stringify(favourites, null, 2);
+
+  const blob = new Blob([data], {
+    type: "application/json"
+  });
+
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+
+  a.href = url;
+  a.download = "Favourite-Ayahs.json";
+  a.click();
+
+  URL.revokeObjectURL(url);
+
+});
+
+favButton.insertAdjacentElement(
+  "afterend",
+  exportBtn
+);
+
+// ======================================
+// PART 54 (7/8)
+// IMPORT FAVOURITES
+// ======================================
+
+const importBtn = document.createElement("button");
+
+importBtn.className = "hero-btn";
+importBtn.style.margin = "10px";
+importBtn.innerHTML = "📥 Import Favourites";
+
+const importInput = document.createElement("input");
+importInput.type = "file";
+importInput.accept = ".json";
+importInput.style.display = "none";
+
+importBtn.addEventListener("click", () => {
+
+  importInput.click();
+
+});
+
+importInput.addEventListener("change", (e) => {
+
+  const file = e.target.files[0];
+
+  if (!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = () => {
+
+    try {
+
+      const favourites = JSON.parse(reader.result);
+
+      localStorage.setItem(
+        "favouriteAyahs",
+        JSON.stringify(favourites)
+      );
+
+      alert("✅ Favourites Imported Successfully!");
+
+    } catch {
+
+      alert("❌ Invalid JSON File");
+
+    }
+
+  };
+
+  reader.readAsText(file);
+
+});
+
+exportBtn.insertAdjacentElement(
+  "afterend",
+  importBtn
+);
+
+document.body.appendChild(importInput);
+
+// ======================
+// PART 54 (8/8)
+// SMART READING STATS
+// ======================
+
+// Total Reading Counter
+let totalRead = Number(localStorage.getItem("totalRead")) || 0;
+
+if (!sessionStorage.getItem("surahVisited")) {
+
+  totalRead++;
+
+  localStorage.setItem("totalRead", totalRead);
+
+  sessionStorage.setItem("surahVisited", "true");
+
+}
+
+const statsCard = document.createElement("div");
+
+statsCard.className = "card";
+
+statsCard.style.marginTop = "20px";
+
+statsCard.innerHTML = `
+<h3 style="text-align:center;">
+📊 Reading Statistics
+</h3>
+
+<p><b>Current Surah:</b> ${id} / 114</p>
+
+<p><b>Total Surahs Opened:</b> ${totalRead}</p>
+
+<p><b>Translation:</b> ${language}</p>
+
+<p><b>Last Visit:</b> ${
+localStorage.getItem("lastVisit") || "First Time"
+}</p>
+`;
+
+surahContent.appendChild(statsCard);
+
+console.log("✅ Part 54 Completed Successfully");
+
+// ========================================
+// PART 55 (1/8)
+// ADVANCED READING STATS
+// ========================================
+
+const readingStats = JSON.parse(
+  localStorage.getItem("readingStats")
+) || {
+  totalRead: 0,
+  completed: [],
+  streak: 0,
+  lastDate: ""
+};
+
+const today = new Date().toDateString();
+
+if (readingStats.lastDate !== today) {
+
+  readingStats.streak++;
+
+  readingStats.lastDate = today;
+
+}
+
+if (!readingStats.completed.includes(id)) {
+
+  readingStats.completed.push(id);
+
+  readingStats.totalRead++;
+
+}
+
+localStorage.setItem(
+  "readingStats",
+  JSON.stringify(readingStats)
+);
+
+// Create Stats Card
+
+const statsCard = document.createElement("div");
+
+statsCard.className = "card";
+
+statsCard.style.marginTop = "20px";
+
+statsCard.innerHTML = `
+<h3 style="text-align:center;">
+📊 Reading Statistics
+</h3>
+
+<p>📖 Surahs Read: <b>${readingStats.totalRead}</b></p>
+
+<p>🔥 Daily Streak:
+<b>${readingStats.streak}</b> day(s)</p>
+
+<p>✅ Completed:
+<b>${readingStats.completed.length}/114</b></p>
+`;
+
+surahContent.appendChild(statsCard);
+
+// ======================
+// PART 55 (2/8)
+// SEARCH AYAH
+// ======================
+
+const searchBox = document.createElement("input");
+
+searchBox.type = "search";
+searchBox.placeholder = "🔍 Search Translation...";
+searchBox.className = "search-box";
+
+searchBox.style.width = "100%";
+searchBox.style.padding = "12px";
+searchBox.style.margin = "20px 0";
+searchBox.style.borderRadius = "10px";
+searchBox.style.border = "1px solid #ccc";
+searchBox.style.fontSize = "16px";
+
+surahTitle.insertAdjacentElement("afterend", searchBox);
+
+searchBox.addEventListener("input", () => {
+
+  const keyword = searchBox.value.toLowerCase();
+
+  document.querySelectorAll("#surahContent .card")
+    .forEach(card => {
+
+      const text = card.innerText.toLowerCase();
+
+      card.style.display =
+        text.includes(keyword)
+          ? "block"
+          : "none";
+
+    });
+
+});
