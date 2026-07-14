@@ -1,66 +1,108 @@
 // ======================================
 // RAZA EDUCATION HUB
-// HADITH COURSE
-// VERSION 3.0
+// HADITH SYSTEM
+// PART 2
 // ======================================
-
-
-// DOM
 
 const hadithList = document.getElementById("hadithList");
 const searchInput = document.getElementById("searchInput");
 
+let allHadiths = [];
+
+
+// LOAD HADITH DATA
+
+async function loadHadith(){
+
+try{
+
+const response = await fetch(
+"https://raw.githubusercontent.com/ahmedeltaher/hadith-json/master/hadith.json"
+);
+
+
+const data = await response.json();
+
+
+allHadiths = data;
+
+
+displayHadith(allHadiths);
+
+
+console.log("✅ Hadith Loaded:",allHadiths.length);
+
+
+}
+
+catch(error){
+
+console.log(
+"Hadith Loading Error",
+error
+);
+
+
+hadithList.innerHTML =
+`
+<div class="card">
+<h3>⚠️ Hadith Load Failed</h3>
+<p>Internet connection check karein.</p>
+</div>
+`;
+
+}
+
+}
 
 
 
-// Render Hadith Cards
+// DISPLAY
 
-function renderHadith(list){
+function displayHadith(list){
+
 
 if(!hadithList) return;
 
 
-hadithList.innerHTML = "";
+hadithList.innerHTML="";
 
 
-list.forEach(item=>{
+list.slice(0,100).forEach((item,index)=>{
 
 
-hadithList.innerHTML += `
+hadithList.innerHTML +=
+
+`
 
 <div class="card">
 
 
 <h2>
-📖 ${item.title}
+📖 Hadith ${index+1}
 </h2>
 
 
-<p style="font-size:30px;text-align:right;line-height:2;">
-${item.arabic}
+<p style="
+font-size:28px;
+text-align:right;
+direction:rtl;
+">
+${item.arabic || ""}
 </p>
 
 
 <p>
-<b>English:</b> ${item.english}
+${item.text || ""}
 </p>
-
-
-<p>
-<b>Urdu:</b> ${item.urdu}
-</p>
-
-
-<p>
-🏷️ Category: ${item.category || "General"}
-</p>
-
 
 
 <button 
-class="hero-btn openHadith"
-data-id="${item.id}">
-📖 Read Full Hadith
+class="hero-btn"
+onclick="openHadith(${index})">
+
+Read
+
 </button>
 
 
@@ -77,77 +119,31 @@ data-id="${item.id}">
 
 
 
-// Load Data
-
-if(typeof hadiths !== "undefined"){
-
-renderHadith(hadiths);
-
-}
-else{
-
-console.log("❌ hadith-data.js not loaded");
-
-}
-
-
-
-
-// Open Reader Page
-
-document.addEventListener("click",(e)=>{
-
-
-if(e.target.classList.contains("openHadith")){
-
-
-let id = e.target.dataset.id;
-
-
-location.href =
-`hadith-reader.html?id=${id}`;
-
-
-}
-
-
-});
-
-
-
-
-
-// Search Hadith
+// SEARCH
 
 if(searchInput){
 
 
-searchInput.addEventListener("input",()=>{
+searchInput.addEventListener(
+"input",
+function(){
 
 
-let value =
-searchInput.value.toLowerCase();
-
+let text =
+this.value.toLowerCase();
 
 
 let result =
-hadiths.filter(h=>
+allHadiths.filter(h=>
 
-h.title.toLowerCase().includes(value) ||
-
-h.english.toLowerCase().includes(value) ||
-
-h.urdu.toLowerCase().includes(value) ||
-
-(h.category && h.category.toLowerCase().includes(value))
-
+JSON.stringify(h)
+.toLowerCase()
+.includes(text)
 
 );
 
 
-
-renderHadith(result);
-
+displayHadith(result);
 
 
 });
@@ -158,4 +154,22 @@ renderHadith(result);
 
 
 
-console.log("✅ Hadith Course Loaded");
+// OPEN READER
+
+function openHadith(id){
+
+localStorage.setItem(
+"selectedHadith",
+JSON.stringify(allHadiths[id])
+);
+
+
+location.href =
+"hadith-reader.html";
+
+
+}
+
+
+
+loadHadith();
