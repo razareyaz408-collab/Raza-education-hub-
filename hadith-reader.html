@@ -12,7 +12,9 @@
 
 </head>
 
+
 <body>
+
 
 <header>
 
@@ -20,182 +22,256 @@
 🕌 Raza Education Hub
 </div>
 
+
 <nav>
 
-<a href="hadith.html">⬅ Back</a>
+<a href="hadith.html">⬅ Hadith</a>
 
 <a href="index.html">🏠 Home</a>
 
 </nav>
 
+
 </header>
+
+
+
+
 
 <section class="features">
 
+
 <h2 id="hadithTitle">
-📖 Hadith
+📖 Loading Hadith...
 </h2>
+
+
+
 
 <div class="card">
 
-<h3 style="text-align:right;font-size:30px;"
-id="hadithArabic">
-Loading...
+
+
+<h3 
+id="hadithArabic"
+style="
+text-align:right;
+font-size:32px;
+line-height:2;
+">
 </h3>
 
+
+
 <hr>
+
+
 
 <p id="hadithEnglish">
-Loading...
 </p>
+
+
 
 <hr>
 
+
+
 <p id="hadithUrdu">
-Loading...
 </p>
 
-<div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap;">
 
-<button
-id="copyBtn"
-class="hero-btn">
+
+
+
+<div 
+style="
+margin-top:20px;
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+">
+
+
+
+<button id="copyBtn" class="hero-btn">
 📋 Copy
 </button>
 
-<button
-id="shareBtn"
-class="hero-btn">
+
+
+<button id="shareBtn" class="hero-btn">
 📤 Share
 </button>
 
-<button
-id="bookmarkBtn"
-class="hero-btn">
+
+
+<button id="bookmarkBtn" class="hero-btn">
 🔖 Bookmark
 </button>
 
-<button
-id="favBtn"
-class="hero-btn">
+
+
+<button id="favBtn" class="hero-btn">
 ⭐ Favourite
 </button>
 
-  <button
-id="fontPlus"
-class="hero-btn">
+
+
+<button id="fontPlus" class="hero-btn">
 A+
 </button>
 
-<button
-id="fontMinus"
-class="hero-btn">
+
+
+<button id="fontMinus" class="hero-btn">
 A-
 </button>
 
-<button
-id="audioBtn"
-class="hero-btn">
-🔊 Audio
-</button>
 
-<button
-id="notesBtn"
-class="hero-btn">
-📝 Notes
-</button>
 
-<button
-id="themeBtn"
-class="hero-btn">
+<button id="themeBtn" class="hero-btn">
 🌙 Theme
-</button>  
-  
-</div>
+</button>
+
+
 
 </div>
 
- <!-- Reading Progress -->
+
+
+</div>
+
+
+
+
+
+
+<!-- Progress -->
+
+
 <progress
+
 id="progressBar"
-value="1"
-max="40"
+
+value="0"
+
+max="100"
+
 style="
 width:100%;
 height:12px;
 margin:20px 0;
 ">
+
 </progress>
 
-<p
+
+
+<p 
 id="readingInfo"
 style="
 text-align:center;
 font-weight:bold;
-margin-bottom:20px;
 ">
-Hadith 1 of 40
 </p>
 
-<!-- Search -->
-<input
-id="searchHadith"
-type="search"
-placeholder="🔍 Search Hadith..."
-style="
-width:100%;
-padding:14px;
-border-radius:10px;
-margin-bottom:20px;
-">
 
-<!-- Reading Stats -->
-<div
-class="card"
-id="statsCard">
 
-<h3>📊 Reading Statistics</h3>
+
+
+
+<!-- Statistics -->
+
+
+<div class="card">
+
+
+<h3>
+📊 Reading Statistics
+</h3>
+
+
 
 <p id="totalRead">
 Total Read : 0
 </p>
 
+
+
 <p id="bookmarkCount">
 Bookmarks : 0
 </p>
+
+
 
 <p id="favCount">
 Favourites : 0
 </p>
 
-</div> 
-  
-<div style="margin-top:25px;display:flex;justify-content:space-between;">
 
-<button
+
+</div>
+
+
+
+
+
+
+
+<div
+style="
+margin-top:25px;
+display:flex;
+justify-content:space-between;
+">
+
+
+<button 
 id="prevBtn"
 class="hero-btn">
 ⬅ Previous
 </button>
 
-<button
+
+
+<button 
 id="nextBtn"
 class="hero-btn">
 Next ➡
 </button>
 
+
+
 </div>
+
+
+
 
 </section>
 
+
+
+
+
+
 <footer>
 
-<p>© 2026 Raza Education Hub</p>
+<p>
+© 2026 Raza Education Hub
+</p>
 
 </footer>
 
+
+
+
+
+
+
 <script src="hadith-data.js"></script>
+
 <script src="hadith-reader.js"></script>
+
 
 </body>
 
