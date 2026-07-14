@@ -1094,3 +1094,275 @@ searchBox.addEventListener("input", () => {
     });
 
 });
+
+// ======================
+// PART 55 (3/8)
+// AYAH BOOKMARK FEATURE
+// ======================
+
+document.querySelectorAll("#surahContent .card")
+.forEach((card,index)=>{
+
+  const btn = document.createElement("button");
+
+  btn.innerHTML = "⭐ Save Ayah";
+  btn.style.marginTop = "10px";
+  btn.style.padding = "8px 12px";
+  btn.style.border = "none";
+  btn.style.borderRadius = "8px";
+  btn.style.cursor = "pointer";
+
+  card.appendChild(btn);
+
+
+  btn.addEventListener("click",()=>{
+
+    let saved = JSON.parse(
+      localStorage.getItem("savedAyah") || "[]"
+    );
+
+    saved.push({
+      ayah:index+1,
+      text:card.innerText
+    });
+
+    localStorage.setItem(
+      "savedAyah",
+      JSON.stringify(saved)
+    );
+
+    btn.innerHTML="✅ Saved";
+
+  });
+
+});
+
+// ======================
+// PART 55 (4/8)
+// LOAD SAVED AYAH
+// ======================
+
+function showSavedAyah(){
+
+  const saved = JSON.parse(
+    localStorage.getItem("savedAyah") || "[]"
+  );
+
+  if(saved.length === 0){
+    alert("No saved Ayah found");
+    return;
+  }
+
+
+  let box = document.createElement("div");
+
+  box.className="saved-box";
+
+  box.innerHTML = `
+  <h3>⭐ Saved Ayah</h3>
+  ${
+    saved.map((item,index)=>`
+      <div class="saved-card">
+        <b>Ayah ${item.ayah}</b>
+        <p>${item.text}</p>
+      </div>
+    `).join("")
+  }
+  `;
+
+
+  document.body.appendChild(box);
+
+}
+
+
+// Create Saved Button
+
+const savedBtn = document.createElement("button");
+
+savedBtn.innerHTML="⭐ My Saved Ayah";
+
+savedBtn.style.padding="12px";
+savedBtn.style.margin="10px";
+savedBtn.style.borderRadius="10px";
+savedBtn.style.cursor="pointer";
+
+surahTitle.insertAdjacentElement(
+"afterend",
+savedBtn
+);
+
+
+savedBtn.onclick = showSavedAyah;
+
+// ======================
+// PART 55 (5/8)
+// SHARE AYAH FEATURE
+// ======================
+
+document.querySelectorAll("#surahContent .card")
+.forEach((card)=>{
+
+  const shareBtn = document.createElement("button");
+
+  shareBtn.innerHTML = "📤 Share Ayah";
+
+  shareBtn.style.marginLeft = "8px";
+  shareBtn.style.padding = "8px 12px";
+  shareBtn.style.border = "none";
+  shareBtn.style.borderRadius = "8px";
+  shareBtn.style.cursor = "pointer";
+
+
+  card.appendChild(shareBtn);
+
+
+  shareBtn.onclick = ()=>{
+
+    const text = card.innerText;
+
+
+    if(navigator.share){
+
+      navigator.share({
+        title:"Quran Ayah",
+        text:text
+      });
+
+    }else{
+
+      navigator.clipboard.writeText(text);
+
+      alert("Ayah copied!");
+
+    }
+
+  };
+
+});
+
+// ======================
+// PART 55 (6/8)
+// AYAH FONT SIZE CONTROL
+// ======================
+
+const fontBox = document.createElement("div");
+
+fontBox.innerHTML = `
+<button id="increaseFont">A+</button>
+<button id="decreaseFont">A-</button>
+`;
+
+fontBox.style.margin="15px 0";
+
+
+surahTitle.insertAdjacentElement(
+"afterend",
+fontBox
+);
+
+
+let ayahSize = 18;
+
+
+document.getElementById("increaseFont")
+.onclick = ()=>{
+
+  ayahSize += 2;
+
+  document.querySelectorAll("#surahContent .card")
+  .forEach(card=>{
+    card.style.fontSize = ayahSize+"px";
+  });
+
+};
+
+
+
+document.getElementById("decreaseFont")
+.onclick = ()=>{
+
+  if(ayahSize > 12){
+    ayahSize -= 2;
+  }
+
+  document.querySelectorAll("#surahContent .card")
+  .forEach(card=>{
+    card.style.fontSize = ayahSize+"px";
+  });
+
+};
+
+// ======================
+// PART 55 (7/8)
+// DARK MODE FEATURE
+// ======================
+
+const darkBtn = document.createElement("button");
+
+darkBtn.innerHTML = "🌙 Dark Mode";
+
+darkBtn.style.padding="12px";
+darkBtn.style.margin="10px";
+darkBtn.style.borderRadius="10px";
+darkBtn.style.cursor="pointer";
+
+
+surahTitle.insertAdjacentElement(
+"afterend",
+darkBtn
+);
+
+
+darkBtn.onclick = ()=>{
+
+  document.body.classList.toggle("dark-mode");
+
+
+  if(document.body.classList.contains("dark-mode")){
+
+    darkBtn.innerHTML="☀️ Light Mode";
+
+  }else{
+
+    darkBtn.innerHTML="🌙 Dark Mode";
+
+  }
+
+}; 
+
+/* ======================
+PART 55 (8/8)
+DARK MODE DESIGN
+====================== */
+
+.dark-mode{
+    background:#121212;
+    color:#ffffff;
+}
+
+
+.dark-mode #surahContent .card{
+
+    background:#1e1e1e;
+    color:#ffffff;
+    border:1px solid #333;
+
+}
+
+
+.dark-mode input{
+
+    background:#222;
+    color:#fff;
+    border-color:#555;
+
+}
+
+
+.dark-mode button{
+
+    background:#0b6b43;
+    color:white;
+
+}
