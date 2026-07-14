@@ -358,3 +358,101 @@ localStorage.setItem(
 );
 
 console.log("✅ Hadith Reader Part 6 Loaded");
+
+// ======================================
+// PART 7
+// STATS + FAVOURITE COUNT + COMPLETION
+// ======================================
+
+// Favourite Count
+const favCount = JSON.parse(
+localStorage.getItem("hadithFavourites")
+) || [];
+
+const statsCard = document.createElement("div");
+
+statsCard.className = "card";
+statsCard.style.marginTop = "25px";
+
+statsCard.innerHTML = `
+<h3>📊 Reading Statistics</h3>
+
+<p>📖 Current Hadith: <b>${id}/${hadiths.length}</b></p>
+
+<p>⭐ Favourite: <b>${favCount.length}</b></p>
+
+<p>🔖 Bookmarks:
+<b>${
+(JSON.parse(localStorage.getItem("hadithBookmarks"))||[]).length
+}</b></p>
+
+<p>📚 History:
+<b>${
+(JSON.parse(localStorage.getItem("hadithHistory"))||[]).length
+}</b></p>
+`;
+
+document.querySelector(".features")
+.appendChild(statsCard);
+
+// Daily Streak
+let streak =
+JSON.parse(localStorage.getItem("hadithStreak")) || {
+days:0,
+last:""
+};
+
+const today = new Date().toDateString();
+
+if(streak.last !== today){
+
+streak.days++;
+streak.last = today;
+
+localStorage.setItem(
+"hadithStreak",
+JSON.stringify(streak)
+);
+
+}
+
+const streakCard = document.createElement("div");
+
+streakCard.className="card";
+
+streakCard.innerHTML=`
+<h3>🔥 Daily Streak</h3>
+
+<p>You have read Hadith for
+<b>${streak.days}</b> day(s).</p>
+`;
+
+document.querySelector(".features")
+.appendChild(streakCard);
+
+// Completion Message
+if(id===hadiths.length){
+
+const complete=document.createElement("div");
+
+complete.className="card";
+
+complete.innerHTML=`
+<h2 style="color:green;text-align:center;">
+🎉 Congratulations!
+</h2>
+
+<p style="text-align:center;">
+You have completed all available Hadith.
+<br><br>
+May Allah reward you.
+<br>🤲 Ameen
+</p>
+`;
+
+document.querySelector(".features")
+.appendChild(complete);
+
+}
+
+console.log("✅ Hadith Reader Part 7 Loaded");
