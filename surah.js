@@ -11,63 +11,131 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const params = new URLSearchParams(window.location.search);
+
 const id = Number(params.get("id")) || 1;
 
 const language =
 localStorage.getItem("translation") || "en.asad";
 
-// Save Last Reading
+// Save last reading
 localStorage.setItem("lastSurah", id);
+
+// DOM
+
+const surahTitle =
+document.getElementById("surahTitle");
+
+const surahContent =
+document.getElementById("surahContent");
+
+const audioPlayer =
+document.getElementById("audioPlayer");
+
+const languageSelect =
+document.getElementById("languageSelect");
+
+const bookmarkBtn =
+document.getElementById("bookmarkBtn");
+
+const completeBtn =
+document.getElementById("completeBtn");
+
+const prevBtn =
+document.getElementById("prevSurah");
+
+const nextBtn =
+document.getElementById("nextSurah");
 
 async function loadSurah() {
 
   try {
 
-    document.getElementById("surahContent").innerHTML =
-      "<h3>Loading Surah...</h3>";
+    surahContent.innerHTML =
+      "<h3 style='text-align:center'>Loading Surah...</h3>";
 
     const response = await fetch(
-  `https://api.alquran.cloud/v1/surah/${id}/editions/quran-uthmani,${language},ar.alafasy`
-);
+      `https://api.alquran.cloud/v1/surah/${id}/editions/quran-uthmani,${language},ar.alafasy`
+    );
 
     const result = await response.json();
 
     const arabic = result.data[0];
-    const english = result.data[1];
+    const translation = result.data[1];
     const audio = result.data[2];
 
-    // Title
-    document.getElementById("surahTitle").innerHTML =
+    surahTitle.innerHTML =
       `${arabic.englishName} (${arabic.name})`;
 
     // Full Surah Audio
-    const audioPlayer = document.getElementById("audioPlayer");
 
-    if (audioPlayer) {
+    audioPlayer.src =
+      `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${id}.mp3`;
 
-      audioPlayer.src =
-        `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${id}.mp3`;
+    audioPlayer.load();
 
-      audioPlayer.load();
+    audioPlayer.onended = () => {
 
-      audioPlayer.onended = () => {
+      if (id < 114) {
 
-        if (id < 114) {
+        location.href = `surah.html?id=${id + 1}`;
 
-          window.location.href = `surah.html?id=${id + 1}`;
+      }
 
-        }
+    };
 
-      };
-
-    }
-
-    // Ayahs
     let html = "";
 
     arabic.ayahs.forEach((ayah, index) => {
 
       html += `
+
+      <div class="card">
+
+        <h2 style="text-align:right
+
+        async function loadSurah() {
+
+  try {
+
+    surahContent.innerHTML =
+      "<h3 style='text-align:center'>Loading Surah...</h3>";
+
+    const response = await fetch(
+      `https://api.alquran.cloud/v1/surah/${id}/editions/quran-uthmani,${language},ar.alafasy`
+    );
+
+    const result = await response.json();
+
+    const arabic = result.data[0];
+    const translation = result.data[1];
+    const audio = result.data[2];
+
+    surahTitle.innerHTML =
+      `${arabic.englishName} (${arabic.name})`;
+
+    // Full Surah Audio
+
+    audioPlayer.src =
+      `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${id}.mp3`;
+
+    audioPlayer.load();
+
+    audioPlayer.onended = () => {
+
+      if (id < 114) {
+
+        location.href = `surah.html?id=${id + 1}`;
+
+      }
+
+    };
+
+    let html = "";
+
+    arabic.ayahs.forEach((ayah, index) => {
+
+      html += `
+
       <div class="card">
 
         <h2 style="text-align:right;font-size:32px;line-height:2;">
@@ -75,25 +143,24 @@ async function loadSurah() {
         </h2>
 
         <p style="margin:15px 0;">
-          ${english.ayahs[index].text}
+          ${translation.ayahs[index].text}
         </p>
 
         <p><b>Ayah ${ayah.numberInSurah}</b></p>
 
         <button
-        class="hero-btn playAyah"
-        data-audio="${audio.ayahs[index].audio}">
-        ▶️ Play Ayah
+          class="hero-btn playAyah"
+          data-audio="${audio.ayahs[index].audio}">
+          ▶️ Play Ayah
         </button>
 
       </div>
+
       `;
 
     });
 
-    document.getElementById("surahContent").innerHTML = html;
-
-    // Ayah Audio
+    surahContent.innerHTML = html;
 
     const ayahAudio = new Audio();
 
@@ -115,11 +182,11 @@ async function loadSurah() {
 
     });
 
-  } catch (e) {
+  } catch (error) {
 
-    console.error(e);
+    console.error(error);
 
-    document.getElementById("surahContent").innerHTML =
+    surahContent.innerHTML =
       "<h3>❌ Failed to load Surah.</h3>";
 
   }
@@ -128,129 +195,104 @@ async function loadSurah() {
 
 loadSurah();
 
+async function loadSurah() {
 
-// Bookmark
+  try {
 
-document.getElementById("bookmarkBtn")?.addEventListener("click", () => {
+    surahContent.innerHTML =
+      "<h3 style='text-align:center'>Loading Surah...</h3>";
 
-  let bookmarks =
-    JSON.parse(localStorage.getItem("bookmarks")) || [];
-
-  if (!bookmarks.includes(id)) {
-
-    bookmarks.push(id);
-
-    localStorage.setItem(
-      "bookmarks",
-      JSON.stringify(bookmarks)
+    const response = await fetch(
+      `https://api.alquran.cloud/v1/surah/${id}/editions/quran-uthmani,${language},ar.alafasy`
     );
 
-    alert("⭐ Bookmarked Successfully");
+    const result = await response.json();
 
-  } else {
+    const arabic = result.data[0];
+    const translation = result.data[1];
+    const audio = result.data[2];
 
-    alert("Already Bookmarked");
+    surahTitle.innerHTML =
+      `${arabic.englishName} (${arabic.name})`;
 
-  }
+    // Full Surah Audio
 
-});
+    audioPlayer.src =
+      `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${id}.mp3`;
 
+    audioPlayer.load();
 
-// Progress
+    audioPlayer.onended = () => {
 
-document.getElementById("completeBtn")?.addEventListener("click", () => {
+      if (id < 114) {
 
-  onAuthStateChanged(auth, async (user) => {
+        location.href = `surah.html?id=${id + 1}`;
 
-    if (!user) {
+      }
 
-      alert("Please Login First");
+    };
 
-      return;
+    let html = "";
 
-    }
+    arabic.ayahs.forEach((ayah, index) => {
 
-    const studentRef =
-      ref(database, "students/" + user.uid);
+      html += `
 
-    const snapshot = await get(studentRef);
+      <div class="card">
 
-    if (!snapshot.exists()) return;
+        <h2 style="text-align:right;font-size:32px;line-height:2;">
+          ${ayah.text}
+        </h2>
 
-    const data = snapshot.val();
+        <p style="margin:15px 0;">
+          ${translation.ayahs[index].text}
+        </p>
 
-    const quranProgress =
-      Math.min((data.quranProgress || 0) + 1, 100);
+        <p><b>Ayah ${ayah.numberInSurah}</b></p>
 
-    const overallProgress =
-      Math.min((data.overallProgress || 0) + 1, 100);
+        <button
+          class="hero-btn playAyah"
+          data-audio="${audio.ayahs[index].audio}">
+          ▶️ Play Ayah
+        </button>
 
-    await update(studentRef, {
+      </div>
 
-      quranProgress,
-      overallProgress
+      `;
 
     });
 
-    alert("✅ Progress Updated");
+    surahContent.innerHTML = html;
 
-  });
+    const ayahAudio = new Audio();
 
-});
+    document.querySelectorAll(".playAyah").forEach(btn => {
 
+      btn.onclick = () => {
 
-// Previous
+        ayahAudio.pause();
 
-document.getElementById("prevSurah")?.addEventListener("click", () => {
+        ayahAudio.src = btn.dataset.audio;
 
-  if (id > 1) {
+        ayahAudio.play().catch(() => {
 
-    window.location.href =
-      `surah.html?id=${id - 1}`;
+          alert("Audio unavailable.");
 
-  } else {
+        });
 
-    alert("This is the first Surah.");
+      };
+
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    surahContent.innerHTML =
+      "<h3>❌ Failed to load Surah.</h3>";
 
   }
-
-});
-
-
-// Next
-
-document.getElementById("nextSurah")?.addEventListener("click", () => {
-
-// Translation Selector
-
-const languageSelect = document.getElementById("languageSelect");
-
-if (languageSelect) {
-
-  languageSelect.value = language;
-
-  languageSelect.addEventListener("change", () => {
-
-    localStorage.setItem(
-      "translation",
-      languageSelect.value
-    );
-
-    location.reload();
-
-  });
 
 }
-  
-  if (id < 114) {
 
-    window.location.href =
-      `surah.html?id=${id + 1}`;
-
-  } else {
-
-    alert("This is the last Surah.");
-
-  }
-
-});
+loadSurah();
