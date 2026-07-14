@@ -464,7 +464,9 @@ darkBtn.onclick = () => {
   ? "☀️ Light Mode"
   : "🌙 Dark Mode";
 
-  // ======================================
+};
+
+// ======================================
 // BOOKMARK + PROGRESS + NAVIGATION
 // ======================================
 
@@ -1100,53 +1102,6 @@ searchBox.addEventListener("input", () => {
 // AYAH BOOKMARK FEATURE
 // ======================
 
-document.querySelectorAll("#surahContent .card")
-.forEach((card,index)=>{
-
-  const btn = document.createElement("button");
-
-  btn.innerHTML = "⭐ Save Ayah";
-  btn.style.marginTop = "10px";
-  btn.style.padding = "8px 12px";
-  btn.style.border = "none";
-  btn.style.borderRadius = "8px";
-  btn.style.cursor = "pointer";
-
-  card.appendChild(btn);
-
-
-  btn.addEventListener("click",()=>{
-
-    let saved = JSON.parse(
-      localStorage.getItem("savedAyah") || "[]"
-    );
-
-    saved.push({
-      ayah:index+1,
-      text:card.innerText
-    });
-
-    localStorage.setItem(
-      "savedAyah",
-      JSON.stringify(saved)
-    );
-
-    btn.innerHTML="✅ Saved";
-
-  });
-
-});
-
-// ======================
-// PART 55 (4/8)
-// LOAD SAVED AYAH
-// ======================
-
-function showSavedAyah(){
-
-  const saved = JSON.parse(
-    localStorage.getItem("savedAyah") || "[]"
-  );
 
   if(saved.length === 0){
     alert("No saved Ayah found");
