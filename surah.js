@@ -135,12 +135,27 @@ async function loadSurah() {
           <b>Ayah ${ayah.numberInSurah}</b>
         </p>
 
-        <button
-          class="hero-btn playAyah"
-          data-audio="${audio.ayahs[index].audio}">
-          ▶️ Play Ayah
-        </button>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
 
+<button
+class="hero-btn playAyah"
+data-audio="${audio.ayahs[index].audio}">
+▶️ Play
+</button>
+
+<button
+class="hero-btn copyAyah"
+data-text="${ayah.text}">
+📋 Copy
+</button>
+
+<button
+class="hero-btn shareAyah"
+data-text="${ayah.text}">
+📤 Share
+</button>
+
+</div>
       </div>
 
       `;
@@ -393,3 +408,43 @@ darkButton.addEventListener("click", () => {
   }
 
 });
+
+// ======================
+// PART 52 (2/4)
+// COPY & SHARE AYAH
+// ======================
+
+function copyAyah(text) {
+
+  navigator.clipboard.writeText(text)
+    .then(() => {
+
+      alert("📋 Ayah copied successfully!");
+
+    })
+    .catch(() => {
+
+      alert("❌ Copy failed.");
+
+    });
+
+}
+
+function shareAyah(text) {
+
+  if (navigator.share) {
+
+    navigator.share({
+
+      title: "Holy Quran",
+      text: text
+
+    }).catch(() => {});
+
+  } else {
+
+    copyAyah(text);
+
+  }
+
+}
