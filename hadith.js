@@ -173,3 +173,117 @@ location.href =
 
 
 loadHadith();
+
+// ======================================
+// RAZA EDUCATION HUB
+// HADITH SYSTEM
+// PART 5
+// ======================================
+
+
+// SAVE ALL HADITH FOR READER
+
+localStorage.setItem(
+"hadithList",
+JSON.stringify(allHadiths)
+);
+
+
+
+// CATEGORY FILTER
+
+const categories =
+document.querySelectorAll(".categoryBtn");
+
+
+categories.forEach(btn=>{
+
+
+btn.addEventListener(
+"click",
+()=>{
+
+
+let cat =
+btn.dataset.category;
+
+
+
+let result =
+allHadiths.filter(
+(h)=>h.category===cat
+);
+
+
+
+displayHadith(result);
+
+
+
+});
+
+
+});
+
+
+
+
+// SHOW ALL BUTTON
+
+function showAllHadith(){
+
+
+displayHadith(
+allHadiths
+);
+
+
+}
+
+
+
+// SMART SEARCH
+
+if(searchInput){
+
+
+searchInput.addEventListener(
+"keyup",
+()=>{
+
+
+let value =
+searchInput.value
+.toLowerCase();
+
+
+
+let result =
+allHadiths.filter(
+(h)=>{
+
+
+return JSON.stringify(h)
+.toLowerCase()
+.includes(value);
+
+
+
+});
+
+
+
+displayHadith(result);
+
+
+
+});
+
+
+}
+
+
+
+console.log(
+"✅ Hadith Part 5 Loaded"
+);
