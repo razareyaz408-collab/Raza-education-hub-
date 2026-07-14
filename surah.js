@@ -10,6 +10,10 @@ import {
   update
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
+// ======================
+// SETTINGS
+// ======================
+
 const params = new URLSearchParams(window.location.search);
 
 const id = Number(params.get("id")) || 1;
@@ -20,7 +24,9 @@ localStorage.getItem("translation") || "en.asad";
 // Save last reading
 localStorage.setItem("lastSurah", id);
 
-// DOM
+// ======================
+// DOM ELEMENTS
+// ======================
 
 const surahTitle =
 document.getElementById("surahTitle");
@@ -46,16 +52,29 @@ document.getElementById("prevSurah");
 const nextBtn =
 document.getElementById("nextSurah");
 
+// ======================
+// LOAD SURAH
+// ======================
+
 async function loadSurah() {
 
   try {
 
-    surahContent.innerHTML =
-      "<h3 style='text-align:center'>Loading Surah...</h3>";
+    surahContent.innerHTML = `
+      <div class="card">
+        <h3 style="text-align:center">
+          ⏳ Loading Surah...
+        </h3>
+      </div>
+    `;
 
     const response = await fetch(
       `https://api.alquran.cloud/v1/surah/${id}/editions/quran-uthmani,${language},ar.alafasy`
     );
+
+    if (!response.ok) {
+      throw new Error("API Error");
+    }
 
     const result = await response.json();
 
@@ -66,7 +85,9 @@ async function loadSurah() {
     surahTitle.innerHTML =
       `${arabic.englishName} (${arabic.name})`;
 
-    // Full Surah Audio
+      // ======================
+    // FULL SURAH AUDIO
+    // ======================
 
     audioPlayer.src =
       `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${id}.mp3`;
@@ -83,52 +104,9 @@ async function loadSurah() {
 
     };
 
-    let html = "";
-
-    arabic.ayahs.forEach((ayah, index) => {
-
-      html += `
-
-      <div class="card">
-
-        <h2 style="text-align:right
-
-        async function loadSurah() {
-
-  try {
-
-    surahContent.innerHTML =
-      "<h3 style='text-align:center'>Loading Surah...</h3>";
-
-    const response = await fetch(
-      `https://api.alquran.cloud/v1/surah/${id}/editions/quran-uthmani,${language},ar.alafasy`
-    );
-
-    const result = await response.json();
-
-    const arabic = result.data[0];
-    const translation = result.data[1];
-    const audio = result.data[2];
-
-    surahTitle.innerHTML =
-      `${arabic.englishName} (${arabic.name})`;
-
-    // Full Surah Audio
-
-    audioPlayer.src =
-      `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${id}.mp3`;
-
-    audioPlayer.load();
-
-    audioPlayer.onended = () => {
-
-      if (id < 114) {
-
-        location.href = `surah.html?id=${id + 1}`;
-
-      }
-
-    };
+    // ======================
+    // SHOW AYAHS
+    // ======================
 
     let html = "";
 
@@ -138,15 +116,24 @@ async function loadSurah() {
 
       <div class="card">
 
-        <h2 style="text-align:right;font-size:32px;line-height:2;">
+        <h2
+        style="
+        text-align:right;
+        font-size:32px;
+        line-height:2;
+        direction:rtl;">
           ${ayah.text}
         </h2>
 
-        <p style="margin:15px 0;">
+        <hr style="margin:15px 0;">
+
+        <p style="font-size:17px;">
           ${translation.ayahs[index].text}
         </p>
 
-        <p><b>Ayah ${ayah.numberInSurah}</b></p>
+        <p style="margin-top:12px;">
+          <b>Ayah ${ayah.numberInSurah}</b>
+        </p>
 
         <button
           class="hero-btn playAyah"
@@ -161,6 +148,10 @@ async function loadSurah() {
     });
 
     surahContent.innerHTML = html;
+
+    // ======================
+    // PLAY SINGLE AYAH
+    // ======================
 
     const ayahAudio = new Audio();
 
@@ -186,8 +177,13 @@ async function loadSurah() {
 
     console.error(error);
 
-    surahContent.innerHTML =
-      "<h3>❌ Failed to load Surah.</h3>";
+    surahContent.innerHTML = `
+      <div class="card">
+        <h3 style="text-align:center;color:red;">
+          ❌ Failed to load Surah.
+        </h3>
+      </div>
+    `;
 
   }
 
@@ -195,104 +191,159 @@ async function loadSurah() {
 
 loadSurah();
 
-async function loadSurah() {
+// ======================
+// BOOKMARK
+// ======================
 
-  try {
+bookmarkBtn?.addEventListener("click", () => {
 
-    surahContent.innerHTML =
-      "<h3 style='text-align:center'>Loading Surah...</h3>";
+  let bookmarks =
+    JSON.parse(localStorage.getItem("bookmarks")) || [];
 
-    const response = await fetch(
-      `https://api.alquran.cloud/v1/surah/${id}/editions/quran-uthmani,${language},ar.alafasy`
+  if (!bookmarks.includes(id)) {
+
+    bookmarks.push(id);
+
+    localStorage.setItem(
+      "bookmarks",
+      JSON.stringify(bookmarks)
     );
 
-    const result = await response.json();
+    alert("⭐ Surah Bookmarked!");
 
-    const arabic = result.data[0];
-    const translation = result.data[1];
-    const audio = result.data[2];
+  } else {
 
-    surahTitle.innerHTML =
-      `${arabic.englishName} (${arabic.name})`;
-
-    // Full Surah Audio
-
-    audioPlayer.src =
-      `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${id}.mp3`;
-
-    audioPlayer.load();
-
-    audioPlayer.onended = () => {
-
-      if (id < 114) {
-
-        location.href = `surah.html?id=${id + 1}`;
-
-      }
-
-    };
-
-    let html = "";
-
-    arabic.ayahs.forEach((ayah, index) => {
-
-      html += `
-
-      <div class="card">
-
-        <h2 style="text-align:right;font-size:32px;line-height:2;">
-          ${ayah.text}
-        </h2>
-
-        <p style="margin:15px 0;">
-          ${translation.ayahs[index].text}
-        </p>
-
-        <p><b>Ayah ${ayah.numberInSurah}</b></p>
-
-        <button
-          class="hero-btn playAyah"
-          data-audio="${audio.ayahs[index].audio}">
-          ▶️ Play Ayah
-        </button>
-
-      </div>
-
-      `;
-
-    });
-
-    surahContent.innerHTML = html;
-
-    const ayahAudio = new Audio();
-
-    document.querySelectorAll(".playAyah").forEach(btn => {
-
-      btn.onclick = () => {
-
-        ayahAudio.pause();
-
-        ayahAudio.src = btn.dataset.audio;
-
-        ayahAudio.play().catch(() => {
-
-          alert("Audio unavailable.");
-
-        });
-
-      };
-
-    });
-
-  } catch (error) {
-
-    console.error(error);
-
-    surahContent.innerHTML =
-      "<h3>❌ Failed to load Surah.</h3>";
+    alert("⚠️ Already Bookmarked!");
 
   }
 
+});
+
+
+// ======================
+// UPDATE PROGRESS
+// ======================
+
+completeBtn?.addEventListener("click", () => {
+
+  onAuthStateChanged(auth, async (user) => {
+
+    if (!user) {
+
+      alert("Please Login First");
+
+      return;
+
+    }
+
+    try {
+
+      const studentRef =
+        ref(database, "students/" + user.uid);
+
+      const snapshot =
+        await get(studentRef);
+
+      if (!snapshot.exists()) return;
+
+      const data = snapshot.val();
+
+      await update(studentRef, {
+
+        quranProgress:
+          Math.min((data.quranProgress || 0) + 1, 100),
+
+        overallProgress:
+          Math.min((data.overallProgress || 0) + 1, 100)
+
+      });
+
+      alert("✅ Progress Updated");
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert("❌ Failed to update progress.");
+
+    }
+
+  });
+
+});
+
+// ======================
+// PREVIOUS SURAH
+// ======================
+
+prevBtn?.addEventListener("click", () => {
+
+  if (id > 1) {
+
+    location.href = `surah.html?id=${id - 1}`;
+
+  } else {
+
+    alert("📖 This is the first Surah.");
+
+  }
+
+});
+
+
+// ======================
+// NEXT SURAH
+// ======================
+
+nextBtn?.addEventListener("click", () => {
+
+  if (id < 114) {
+
+    location.href = `surah.html?id=${id + 1}`;
+
+  } else {
+
+    alert("🎉 You reached the last Surah.");
+
+  }
+
+});
+
+
+// ======================
+// TRANSLATION SELECTOR
+// ======================
+
+if (languageSelect) {
+
+  languageSelect.value = language;
+
+  languageSelect.addEventListener("change", () => {
+
+    localStorage.setItem(
+      "translation",
+      languageSelect.value
+    );
+
+    location.reload();
+
+  });
+
 }
 
-loadSurah();
+
+// ======================
+// PAGE TITLE
+// ======================
+
+document.title = `Surah ${id} | Raza Education Hub`;
+
+
+// ======================
+// SCROLL TO TOP
+// ======================
+
+window.scrollTo({
+  top: 0,
+  behavior: "smooth"
+});
