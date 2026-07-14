@@ -10,35 +10,33 @@ import {
   update
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-// ======================
-// SETTINGS
-// ======================
+// ======================================
+// RAZA EDUCATION HUB
+// Quran Reader Version 2.0
+// ======================================
 
+// URL PARAMS
 const params = new URLSearchParams(window.location.search);
-
 const id = Number(params.get("id")) || 1;
 
+// USER SETTINGS
 const language =
 localStorage.getItem("translation") || "en.asad";
 
-// Save last reading
+const theme =
+localStorage.getItem("theme") || "light";
+
+const fontSize =
+Number(localStorage.getItem("fontSize")) || 32;
+
+// SAVE LAST READING
 localStorage.setItem("lastSurah", id);
 
-// ======================
-// DOM ELEMENTS
-// ======================
-
-const surahTitle =
-document.getElementById("surahTitle");
-
-const surahContent =
-document.getElementById("surahContent");
-
-const audioPlayer =
-document.getElementById("audioPlayer");
-
-const languageSelect =
-document.getElementById("languageSelect");
+// DOM
+const surahTitle = document.getElementById("surahTitle");
+const surahContent = document.getElementById("surahContent");
+const audioPlayer = document.getElementById("audioPlayer");
+const languageSelect = document.getElementById("languageSelect");
 
 const bookmarkBtn =
 document.getElementById("bookmarkBtn");
@@ -52,9 +50,45 @@ document.getElementById("prevSurah");
 const nextBtn =
 document.getElementById("nextSurah");
 
-// ======================
+// AUDIO
+const ayahAudio = new Audio();
+
+// CACHE
+let arabicData = null;
+let translationData = null;
+let audioData = null;
+
+// PAGE TITLE
+document.title = `Surah ${id} | Raza Education Hub`;
+
+// ======================================
+// APPLY USER SETTINGS
+// ======================================
+
+if (theme === "dark") {
+  document.body.classList.add("dark-mode");
+}
+
+if (languageSelect) {
+
+  languageSelect.value = language;
+
+  languageSelect.addEventListener("change", () => {
+
+    localStorage.setItem(
+      "translation",
+      languageSelect.value
+    );
+
+    location.reload();
+
+  });
+
+}
+
+// ======================================
 // LOAD SURAH
-// ======================
+// ======================================
 
 async function loadSurah() {
 
@@ -62,153 +96,372 @@ async function loadSurah() {
 
     surahContent.innerHTML = `
       <div class="card">
-        <h3 style="text-align:center">
+        <h2 style="text-align:center;">
           ⏳ Loading Surah...
-        </h3>
+        </h2>
       </div>
     `;
 
     const response = await fetch(
+
       `https://api.alquran.cloud/v1/surah/${id}/editions/quran-uthmani,${language},ar.alafasy`
+
     );
 
     if (!response.ok) {
-      throw new Error("API Error");
+
+      throw new Error("Failed to load.");
+
     }
 
     const result = await response.json();
 
-    const arabic = result.data[0];
-    const translation = result.data[1];
-    const audio = result.data[2];
+    arabicData = result.data[0];
+    translationData = result.data[1];
+    audioData = result.data[2];
 
     surahTitle.innerHTML =
-      `${arabic.englishName} (${arabic.name})`;
-
-      // ======================
-    // FULL SURAH AUDIO
-    // ======================
+      `${arabicData.englishName} (${arabicData.name})`;
 
     audioPlayer.src =
       `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${id}.mp3`;
 
     audioPlayer.load();
 
-    audioPlayer.onended = () => {
+    createReadingTools();
 
-      if (id < 114) {
+    renderAyahs();
 
-        location.href = `surah.html?id=${id + 1}`;
+  } catch (err) {
 
-      }
-
-    };
-
-    // ======================
-    // SHOW AYAHS
-    // ======================
-
-    let html = "";
-
-    arabic.ayahs.forEach((ayah, index) => {
-
-      html += `
-
-      <div class="card">
-
-        <h2
-        style="
-        text-align:right;
-        font-size:32px;
-        line-height:2;
-        direction:rtl;">
-          ${ayah.text}
-        </h2>
-
-        <hr style="margin:15px 0;">
-
-        <p style="font-size:17px;">
-          ${translation.ayahs[index].text}
-        </p>
-
-        <p style="margin-top:12px;">
-          <b>Ayah ${ayah.numberInSurah}</b>
-        </p>
-
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
-
-<button
-class="hero-btn playAyah"
-data-audio="${audio.ayahs[index].audio}">
-▶️ Play
-</button>
-
-<button
-class="hero-btn copyAyah"
-data-text="${ayah.text}">
-📋 Copy
-</button>
-
-<button
-class="hero-btn shareAyah"
-data-text="${ayah.text}">
-📤 Share
-</button>
-
-</div>
-      </div>
-
-      `;
-
-    });
-
-    surahContent.innerHTML = html;
-
-    // ======================
-    // PLAY SINGLE AYAH
-    // ======================
-
-    const ayahAudio = new Audio();
-
-    document.querySelectorAll(".playAyah").forEach(btn => {
-
-      btn.onclick = () => {
-
-        ayahAudio.pause();
-
-        ayahAudio.src = btn.dataset.audio;
-
-        ayahAudio.play().catch(() => {
-
-          alert("Audio unavailable.");
-
-        });
-
-      };
-
-    });
-
-  } catch (error) {
-
-    console.error(error);
+    console.error(err);
 
     surahContent.innerHTML = `
+
       <div class="card">
-        <h3 style="text-align:center;color:red;">
-          ❌ Failed to load Surah.
-        </h3>
+
+        <h2 style="color:red;text-align:center;">
+          ❌ Failed to Load Surah
+        </h2>
+
       </div>
+
     `;
 
   }
 
 }
 
-loadSurah();
+// ======================================
+// RENDER AYAHS
+// ======================================
 
-// ======================
-// BOOKMARK
-// ======================
+function renderAyahs() {
+
+  let html = "";
+
+  arabicData.ayahs.forEach((ayah, index) => {
+
+    html += `
+
+      <div class="card">
+
+        <h2
+          class="ayahArabic"
+          style="
+            direction:rtl;
+            text-align:right;
+            line-height:2;
+            font-size:${fontSize}px;
+          ">
+
+          ${ayah.text}
+
+        </h2>
+
+        <hr style="margin:15px 0;">
+
+        <p style="font-size:17px;line-height:1.8;">
+
+          ${translationData.ayahs[index].text}
+
+        </p>
+
+        <p style="margin-top:12px;font-weight:bold;">
+
+          Ayah ${ayah.numberInSurah}
+
+        </p>
+
+        <div
+          style="
+            display:flex;
+            gap:10px;
+            flex-wrap:wrap;
+            margin-top:15px;
+          ">
+
+          <button
+            class="hero-btn playAyah"
+            data-audio="${audioData.ayahs[index].audio}">
+            ▶️ Play
+          </button>
+
+          <button
+            class="hero-btn copyAyah"
+            data-text="${ayah.text}">
+            📋 Copy
+          </button>
+
+          <button
+            class="hero-btn shareAyah"
+            data-text="${ayah.text}">
+            📤 Share
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
+
+  });
+
+  surahContent.innerHTML = html;
+
+  activateAyahButtons();
+
+}
+
+// ======================================
+// ACTIVATE AYAH BUTTONS
+// ======================================
+
+function activateAyahButtons() {
+
+  document.querySelectorAll(".playAyah").forEach((btn) => {
+
+    btn.addEventListener("click", () => {
+
+      ayahAudio.pause();
+
+      ayahAudio.src = btn.dataset.audio;
+
+      ayahAudio.play().catch(() => {
+
+        alert("❌ Audio unavailable.");
+
+      });
+
+    });
+
+  });
+
+  document.querySelectorAll(".copyAyah").forEach((btn) => {
+
+    btn.addEventListener("click", async () => {
+
+      try {
+
+        await navigator.clipboard.writeText(btn.dataset.text);
+
+        alert("📋 Ayah copied successfully.");
+
+      } catch {
+
+        alert("❌ Copy failed.");
+
+      }
+
+    });
+
+  });
+
+  document.querySelectorAll(".shareAyah").forEach((btn) => {
+
+    btn.addEventListener("click", async () => {
+
+      if (navigator.share) {
+
+        try {
+
+          await navigator.share({
+
+            title: "Holy Quran",
+
+            text: btn.dataset.text
+
+          });
+
+        } catch {}
+
+      } else {
+
+        try {
+
+          await navigator.clipboard.writeText(btn.dataset.text);
+
+          alert("📋 Ayah copied. Share manually.");
+
+        } catch {
+
+          alert("❌ Share unavailable.");
+
+        }
+
+      }
+
+    });
+
+  });
+
+}
+
+// ======================================
+// READING TOOLS
+// ======================================
+
+function createReadingTools() {
+
+  // Progress Bar
+  const progressBar = document.createElement("progress");
+
+  progressBar.max = 114;
+  progressBar.value = id;
+
+  progressBar.style.width = "100%";
+  progressBar.style.height = "12px";
+  progressBar.style.margin = "20px 0";
+
+  surahTitle.insertAdjacentElement(
+    "afterend",
+    progressBar
+  );
+
+  // Reading Info
+  const info = document.createElement("p");
+
+  info.style.textAlign = "center";
+  info.style.margin = "15px 0";
+
+  info.innerHTML =
+    `📖 Surah ${id} of 114`;
+
+  progressBar.insertAdjacentElement(
+    "afterend",
+    info
+  );
+
+  // Font Controls
+  const controls =
+    document.createElement("div");
+
+  controls.style.display = "flex";
+  controls.style.justifyContent = "center";
+  controls.style.gap = "10px";
+  controls.style.margin = "20px 0";
+
+  const minus =
+    document.createElement("button");
+
+  minus.className = "hero-btn";
+  minus.textContent = "A-";
+
+  const plus =
+    document.createElement("button");
+
+  plus.className = "hero-btn";
+  plus.textContent = "A+";
+
+  controls.append(minus, plus);
+
+  info.insertAdjacentElement(
+    "afterend",
+    controls
+  );
+
+  minus.onclick = () => {
+
+    changeFontSize(-2);
+
+  };
+
+  plus.onclick = () => {
+
+    changeFontSize(2);
+
+  };
+
+}
+
+// ======================================
+// FONT SIZE
+// ======================================
+
+function changeFontSize(change) {
+
+  let size =
+    Number(localStorage.getItem("fontSize")) || 32;
+
+  size += change;
+
+  if (size < 20) size = 20;
+  if (size > 60) size = 60;
+
+  localStorage.setItem("fontSize", size);
+
+  document
+    .querySelectorAll(".ayahArabic")
+    .forEach((ayah) => {
+
+      ayah.style.fontSize = size + "px";
+
+    });
+
+}
+
+// ======================================
+// DARK MODE
+// ======================================
+
+const darkBtn =
+document.createElement("button");
+
+darkBtn.className = "hero-btn";
+darkBtn.style.margin = "15px";
+
+darkBtn.innerHTML =
+document.body.classList.contains("dark-mode")
+? "☀️ Light Mode"
+: "🌙 Dark Mode";
+
+surahTitle.insertAdjacentElement(
+  "afterend",
+  darkBtn
+);
+
+darkBtn.onclick = () => {
+
+  document.body.classList.toggle("dark-mode");
+
+  const dark =
+  document.body.classList.contains("dark-mode");
+
+  localStorage.setItem(
+    "theme",
+    dark ? "dark" : "light"
+  );
+
+  darkBtn.innerHTML =
+  dark
+  ? "☀️ Light Mode"
+  : "🌙 Dark Mode";
+
+  // ======================================
+// BOOKMARK + PROGRESS + NAVIGATION
+// ======================================
+
+// Bookmark
 
 bookmarkBtn?.addEventListener("click", () => {
 
@@ -224,20 +477,17 @@ bookmarkBtn?.addEventListener("click", () => {
       JSON.stringify(bookmarks)
     );
 
-    alert("⭐ Surah Bookmarked!");
+    alert("⭐ Surah bookmarked successfully.");
 
   } else {
 
-    alert("⚠️ Already Bookmarked!");
+    alert("✅ Already bookmarked.");
 
   }
 
 });
 
-
-// ======================
-// UPDATE PROGRESS
-// ======================
+// Firebase Progress
 
 completeBtn?.addEventListener("click", () => {
 
@@ -245,8 +495,7 @@ completeBtn?.addEventListener("click", () => {
 
     if (!user) {
 
-      alert("Please Login First");
-
+      alert("Please login first.");
       return;
 
     }
@@ -273,13 +522,13 @@ completeBtn?.addEventListener("click", () => {
 
       });
 
-      alert("✅ Progress Updated");
+      alert("✅ Progress updated successfully.");
 
-    } catch (error) {
+    } catch (err) {
 
-      console.error(error);
+      console.error(err);
 
-      alert("❌ Failed to update progress.");
+      alert("❌ Progress update failed.");
 
     }
 
@@ -287,249 +536,53 @@ completeBtn?.addEventListener("click", () => {
 
 });
 
-// ======================
-// PREVIOUS SURAH
-// ======================
+// Previous
 
 prevBtn?.addEventListener("click", () => {
 
   if (id > 1) {
 
-    location.href = `surah.html?id=${id - 1}`;
-
-  } else {
-
-    alert("📖 This is the first Surah.");
+    location.href =
+      `surah.html?id=${id - 1}`;
 
   }
 
 });
 
-
-// ======================
-// NEXT SURAH
-// ======================
+// Next
 
 nextBtn?.addEventListener("click", () => {
 
   if (id < 114) {
 
-    location.href = `surah.html?id=${id + 1}`;
-
-  } else {
-
-    alert("🎉 You reached the last Surah.");
+    location.href =
+      `surah.html?id=${id + 1}`;
 
   }
 
 });
 
+// Auto Next after Full Audio
 
-// ======================
-// TRANSLATION SELECTOR
-// ======================
+audioPlayer.onended = () => {
 
-if (languageSelect) {
+  if (id < 114) {
 
-  languageSelect.value = language;
-
-  languageSelect.addEventListener("change", () => {
-
-    localStorage.setItem(
-      "translation",
-      languageSelect.value
-    );
-
-    location.reload();
-
-  });
-
-}
-
-
-// ======================
-// PAGE TITLE
-// ======================
-
-document.title = `Surah ${id} | Raza Education Hub`;
-
-
-// ======================
-// SCROLL TO TOP
-// ======================
-
-window.scrollTo({
-  top: 0,
-  behavior: "smooth"
-});
-
-// ======================
-// PART 52 (1/4)
-// DARK MODE
-// ======================
-
-const savedTheme = localStorage.getItem("theme");
-
-if (savedTheme === "dark") {
-  document.body.classList.add("dark-mode");
-}
-
-const darkButton = document.createElement("button");
-
-darkButton.className = "hero-btn";
-darkButton.style.margin = "10px";
-darkButton.id = "darkModeToggle";
-
-darkButton.innerHTML =
-document.body.classList.contains("dark-mode")
-? "☀️ Light Mode"
-: "🌙 Dark Mode";
-
-const title = document.getElementById("surahTitle");
-
-if (title) {
-  title.insertAdjacentElement("afterend", darkButton);
-}
-
-darkButton.addEventListener("click", () => {
-
-  document.body.classList.toggle("dark-mode");
-
-  if (document.body.classList.contains("dark-mode")) {
-
-    localStorage.setItem("theme", "dark");
-    darkButton.innerHTML = "☀️ Light Mode";
-
-  } else {
-
-    localStorage.setItem("theme", "light");
-    darkButton.innerHTML = "🌙 Dark Mode";
+    location.href =
+      `surah.html?id=${id + 1}`;
 
   }
 
-});
+};
 
-// ======================
-// PART 52 (2/4)
-// COPY & SHARE AYAH
-// ======================
+};
 
-function copyAyah(text) {
+// ======================================
+// FINAL INITIALIZATION
+// ======================================
 
-  navigator.clipboard.writeText(text)
-    .then(() => {
+// Reading History
 
-      alert("📋 Ayah copied successfully!");
-
-    })
-    .catch(() => {
-
-      alert("❌ Copy failed.");
-
-    });
-
-}
-
-function shareAyah(text) {
-
-  if (navigator.share) {
-
-    navigator.share({
-
-      title: "Holy Quran",
-      text: text
-
-    }).catch(() => {});
-
-  } else {
-
-    copyAyah(text);
-
-  }
-
-}
-
-function shareAyah(text) {
-
-  if (navigator.share) {
-
-    navigator.share({
-
-      title: "Holy Quran",
-      text: text
-
-    }).catch(() => {});
-
-  } else {
-
-    copyAyah(text);
-
-  }
-
-}
-
-// ======================
-// PART 52 (3/4)
-// ACTIVATE COPY & SHARE
-// ======================
-
-document.addEventListener("click", (e) => {
-
-  if (e.target.classList.contains("copyAyah")) {
-    copyAyah(e.target.dataset.text);
-  }
-
-  if (e.target.classList.contains("shareAyah")) {
-    shareAyah(e.target.dataset.text);
-  }
-
-});
-
-window.addEventListener("load", () => {
-
-  setTimeout(() => {
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-
-  }, 300);
-
-});
-
-localStorage.setItem(
-  "lastVisit",
-  new Date().toLocaleString()
-);
-
-// ======================
-// PART 52 (4/4)
-// FAVOURITE AYAH + SHORTCUTS
-// ======================
-
-const favouriteAyahs =
-JSON.parse(localStorage.getItem("favouriteAyahs")) || [];
-
-// Keyboard Shortcuts
-document.addEventListener("keydown", (e) => {
-
-  // Right Arrow = Next Surah
-  if (e.key === "ArrowRight" && id < 114) {
-    location.href = `surah.html?id=${id + 1}`;
-  }
-
-  // Left Arrow = Previous Surah
-  if (e.key === "ArrowLeft" && id > 1) {
-    location.href = `surah.html?id=${id - 1}`;
-  }
-
-});
-
-// Welcome Message
-console.log("📖 Raza Education Hub Quran Loaded Successfully");
-
-// Save Reading History
 let history =
 JSON.parse(localStorage.getItem("readingHistory")) || [];
 
@@ -537,11 +590,14 @@ history.unshift({
 
   surah: id,
 
+  name: arabicData?.englishName || "",
+
   date: new Date().toLocaleString()
 
 });
 
-// Keep only last 20 records
+// Keep only last 20
+
 history = history.slice(0, 20);
 
 localStorage.setItem(
@@ -549,156 +605,86 @@ localStorage.setItem(
   JSON.stringify(history)
 );
 
-// ======================
-// END OF SURAH.JS
-// ======================
-
-console.log("✅ surah.js Loaded Successfully");
-
-// ======================
-// PART 52 (3/4)
-// ACTIVATE COPY & SHARE
-// ======================
-
-document.addEventListener("click", (e) => {
-
-  if (e.target.classList.contains("copyAyah")) {
-    copyAyah(e.target.dataset.text);
-  }
-
-  if (e.target.classList.contains("shareAyah")) {
-    shareAyah(e.target.dataset.text);
-  }
-
-});
-
-// ======================
-// AUTO SCROLL
-// ======================
-
-window.addEventListener("load", () => {
-
-  setTimeout(() => {
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-
-  }, 300);
-
-});
-
-// ======================
-// SAVE LAST VISIT
-// ======================
+// Last Visit
 
 localStorage.setItem(
   "lastVisit",
   new Date().toLocaleString()
 );
 
-// ======================
-// PART 52 (4/4)
-// READING TOOLS
-// ======================
+// Keyboard Shortcuts
 
-// Reading Progress Bar
+document.addEventListener("keydown", (e) => {
 
-const progressBar = document.createElement("progress");
-progressBar.max = 114;
-progressBar.value = id;
-progressBar.style.width = "100%";
-progressBar.style.height = "12px";
-progressBar.style.margin = "20px 0";
+  if (e.key === "ArrowRight" && id < 114) {
 
-surahTitle.insertAdjacentElement("afterend", progressBar);
+    location.href =
+      `surah.html?id=${id + 1}`;
 
-// Reading Time
+  }
 
-const readingInfo = document.createElement("p");
-readingInfo.style.textAlign = "center";
-readingInfo.style.margin = "15px 0";
-readingInfo.innerHTML = `📖 Surah ${id} of 114`;
-progressBar.insertAdjacentElement("afterend", readingInfo);
+  if (e.key === "ArrowLeft" && id > 1) {
 
-// Font Size Controls
+    location.href =
+      `surah.html?id=${id - 1}`;
 
-let fontSize =
-Number(localStorage.getItem("fontSize")) || 32;
-
-const controls = document.createElement("div");
-controls.style.display = "flex";
-controls.style.justifyContent = "center";
-controls.style.gap = "10px";
-controls.style.margin = "20px 0";
-
-const minusBtn = document.createElement("button");
-minusBtn.className = "hero-btn";
-minusBtn.textContent = "A-";
-
-const plusBtn = document.createElement("button");
-plusBtn.className = "hero-btn";
-plusBtn.textContent = "A+";
-
-controls.append(minusBtn, plusBtn);
-
-readingInfo.insertAdjacentElement("afterend", controls);
-
-function updateFontSize() {
-
-  document.querySelectorAll("#surahContent h2")
-    .forEach(el => {
-
-      el.style.fontSize = fontSize + "px";
-
-    });
-
-}
-
-setTimeout(updateFontSize, 300);
-
-plusBtn.addEventListener("click", () => {
-
-  fontSize = Math.min(fontSize + 2, 60);
-
-  localStorage.setItem("fontSize", fontSize);
-
-  updateFontSize();
+  }
 
 });
 
-minusBtn.addEventListener("click", () => {
+// Scroll Top
 
-  fontSize = Math.max(fontSize - 2, 20);
+window.addEventListener("load", () => {
 
-  localStorage.setItem("fontSize", fontSize);
+  window.scrollTo({
 
-  updateFontSize();
+    top: 0,
+
+    behavior: "smooth"
+
+  });
 
 });
 
-// Completion Message
+// Final Surah Message
 
 if (id === 114) {
 
-  const msg = document.createElement("div");
+  const card =
+    document.createElement("div");
 
-  msg.className = "card";
+  card.className = "card";
 
-  msg.style.marginTop = "20px";
+  card.innerHTML = `
 
-  msg.innerHTML = `
     <h2 style="text-align:center;color:green;">
+
       🎉 Congratulations!
+
     </h2>
 
     <p style="text-align:center;">
-      You have reached the final Surah of the Holy Quran.
-      May Allah accept your efforts. Ameen.
+
+      You have completed reading the Holy Quran.
+
+      <br><br>
+
+      May Allah accept your efforts.
+
+      <br>
+
+      Ameen 🤲
+
     </p>
+
   `;
 
-  surahContent.appendChild(msg);
+  surahContent.appendChild(card);
 
 }
+
+// Start App
+
+loadSurah();
+
+console.log("✅ surah.js v2 Loaded Successfully"); 
