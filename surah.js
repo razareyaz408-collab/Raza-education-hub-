@@ -347,3 +347,49 @@ window.scrollTo({
   top: 0,
   behavior: "smooth"
 });
+
+// ======================
+// PART 52 (1/4)
+// DARK MODE
+// ======================
+
+const savedTheme = localStorage.getItem("theme");
+
+if (savedTheme === "dark") {
+  document.body.classList.add("dark-mode");
+}
+
+const darkButton = document.createElement("button");
+
+darkButton.className = "hero-btn";
+darkButton.style.margin = "10px";
+darkButton.id = "darkModeToggle";
+
+darkButton.innerHTML =
+document.body.classList.contains("dark-mode")
+? "☀️ Light Mode"
+: "🌙 Dark Mode";
+
+const title = document.getElementById("surahTitle");
+
+if (title) {
+  title.insertAdjacentElement("afterend", darkButton);
+}
+
+darkButton.addEventListener("click", () => {
+
+  document.body.classList.toggle("dark-mode");
+
+  if (document.body.classList.contains("dark-mode")) {
+
+    localStorage.setItem("theme", "dark");
+    darkButton.innerHTML = "☀️ Light Mode";
+
+  } else {
+
+    localStorage.setItem("theme", "light");
+    darkButton.innerHTML = "🌙 Dark Mode";
+
+  }
+
+});
