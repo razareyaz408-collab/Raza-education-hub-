@@ -83,3 +83,100 @@ document.title=item.title;
 loadHadith();
 
 console.log("✅ Hadith Reader Part 3 Loaded");
+
+// ======================================
+// PART 4
+// PREVIOUS + NEXT + COPY + SHARE
+// ======================================
+
+// Previous Button
+document.getElementById("prevBtn").onclick = () => {
+
+  if (id > 1) {
+
+    location.href = `hadith-reader.html?id=${id - 1}`;
+
+  } else {
+
+    alert("This is the first Hadith.");
+
+  }
+
+};
+
+// Next Button
+document.getElementById("nextBtn").onclick = () => {
+
+  if (id < hadiths.length) {
+
+    location.href = `hadith-reader.html?id=${id + 1}`;
+
+  } else {
+
+    alert("This is the last Hadith.");
+
+  }
+
+};
+
+// Copy Hadith
+document.getElementById("copyBtn").onclick = async () => {
+
+  const text =
+`${title.innerText}
+
+${arabic.innerText}
+
+${english.innerText}
+
+${urdu.innerText}`;
+
+  try {
+
+    await navigator.clipboard.writeText(text);
+
+    alert("✅ Hadith copied.");
+
+  } catch {
+
+    alert("❌ Copy failed.");
+
+  }
+
+};
+
+// Share Hadith
+document.getElementById("shareBtn").onclick = async () => {
+
+  const text =
+`${title.innerText}
+
+${english.innerText}
+
+${urdu.innerText}`;
+
+  if (navigator.share) {
+
+    try {
+
+      await navigator.share({
+
+        title: title.innerText,
+
+        text: text
+
+      });
+
+    } catch {}
+
+  } else {
+
+    await navigator.clipboard.writeText(text);
+
+    alert("📋 Hadith copied. Share manually.");
+
+  }
+
+};
+
+console.log("✅ Hadith Reader Part 4 Loaded");
