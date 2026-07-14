@@ -886,3 +886,30 @@ body.dark-mode .hero-btn{
 body.dark-mode audio{
     filter:brightness(.9);
 }
+
+/* ==========================
+   HADITH READER
+========================== */
+
+#hadithArabic{
+    font-size:32px;
+    direction:rtl;
+    text-align:right;
+    line-height:2;
+}
+
+#hadithEnglish,
+#hadithUrdu{
+    font-size:18px;
+    line-height:1.9;
+    margin-top:15px;
+}
+
+.hero-btn{
+    cursor:pointer;
+}
+
+.hero-btn:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
