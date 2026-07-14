@@ -554,3 +554,151 @@ localStorage.setItem(
 // ======================
 
 console.log("✅ surah.js Loaded Successfully");
+
+// ======================
+// PART 52 (3/4)
+// ACTIVATE COPY & SHARE
+// ======================
+
+document.addEventListener("click", (e) => {
+
+  if (e.target.classList.contains("copyAyah")) {
+    copyAyah(e.target.dataset.text);
+  }
+
+  if (e.target.classList.contains("shareAyah")) {
+    shareAyah(e.target.dataset.text);
+  }
+
+});
+
+// ======================
+// AUTO SCROLL
+// ======================
+
+window.addEventListener("load", () => {
+
+  setTimeout(() => {
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+
+  }, 300);
+
+});
+
+// ======================
+// SAVE LAST VISIT
+// ======================
+
+localStorage.setItem(
+  "lastVisit",
+  new Date().toLocaleString()
+);
+
+// ======================
+// PART 52 (4/4)
+// READING TOOLS
+// ======================
+
+// Reading Progress Bar
+
+const progressBar = document.createElement("progress");
+progressBar.max = 114;
+progressBar.value = id;
+progressBar.style.width = "100%";
+progressBar.style.height = "12px";
+progressBar.style.margin = "20px 0";
+
+surahTitle.insertAdjacentElement("afterend", progressBar);
+
+// Reading Time
+
+const readingInfo = document.createElement("p");
+readingInfo.style.textAlign = "center";
+readingInfo.style.margin = "15px 0";
+readingInfo.innerHTML = `📖 Surah ${id} of 114`;
+progressBar.insertAdjacentElement("afterend", readingInfo);
+
+// Font Size Controls
+
+let fontSize =
+Number(localStorage.getItem("fontSize")) || 32;
+
+const controls = document.createElement("div");
+controls.style.display = "flex";
+controls.style.justifyContent = "center";
+controls.style.gap = "10px";
+controls.style.margin = "20px 0";
+
+const minusBtn = document.createElement("button");
+minusBtn.className = "hero-btn";
+minusBtn.textContent = "A-";
+
+const plusBtn = document.createElement("button");
+plusBtn.className = "hero-btn";
+plusBtn.textContent = "A+";
+
+controls.append(minusBtn, plusBtn);
+
+readingInfo.insertAdjacentElement("afterend", controls);
+
+function updateFontSize() {
+
+  document.querySelectorAll("#surahContent h2")
+    .forEach(el => {
+
+      el.style.fontSize = fontSize + "px";
+
+    });
+
+}
+
+setTimeout(updateFontSize, 300);
+
+plusBtn.addEventListener("click", () => {
+
+  fontSize = Math.min(fontSize + 2, 60);
+
+  localStorage.setItem("fontSize", fontSize);
+
+  updateFontSize();
+
+});
+
+minusBtn.addEventListener("click", () => {
+
+  fontSize = Math.max(fontSize - 2, 20);
+
+  localStorage.setItem("fontSize", fontSize);
+
+  updateFontSize();
+
+});
+
+// Completion Message
+
+if (id === 114) {
+
+  const msg = document.createElement("div");
+
+  msg.className = "card";
+
+  msg.style.marginTop = "20px";
+
+  msg.innerHTML = `
+    <h2 style="text-align:center;color:green;">
+      🎉 Congratulations!
+    </h2>
+
+    <p style="text-align:center;">
+      You have reached the final Surah of the Holy Quran.
+      May Allah accept your efforts. Ameen.
+    </p>
+  `;
+
+  surahContent.appendChild(msg);
+
+}
