@@ -180,3 +180,103 @@ ${urdu.innerText}`;
 };
 
 console.log("✅ Hadith Reader Part 4 Loaded");
+
+// ======================================
+// PART 5
+// BOOKMARK + FAVOURITE + FONT SIZE
+// ======================================
+
+// Bookmark
+document.getElementById("bookmarkBtn").onclick = () => {
+
+  let bookmarks =
+    JSON.parse(localStorage.getItem("hadithBookmarks")) || [];
+
+  if (!bookmarks.includes(id)) {
+
+    bookmarks.push(id);
+
+    localStorage.setItem(
+      "hadithBookmarks",
+      JSON.stringify(bookmarks)
+    );
+
+    alert("⭐ Hadith Bookmarked");
+
+  } else {
+
+    alert("Already Bookmarked");
+
+  }
+
+};
+
+// Favourite
+document.getElementById("favBtn").onclick = () => {
+
+  let favourites =
+    JSON.parse(localStorage.getItem("hadithFavourites")) || [];
+
+  if (!favourites.includes(id)) {
+
+    favourites.push(id);
+
+    localStorage.setItem(
+      "hadithFavourites",
+      JSON.stringify(favourites)
+    );
+
+    alert("❤️ Added to Favourite");
+
+  } else {
+
+    favourites = favourites.filter(x => x != id);
+
+    localStorage.setItem(
+      "hadithFavourites",
+      JSON.stringify(favourites)
+    );
+
+    alert("Removed from Favourite");
+
+  }
+
+};
+
+// Font Size
+let size =
+Number(localStorage.getItem("hadithFont")) || 30;
+
+function applyFont(){
+
+  arabic.style.fontSize = size + "px";
+
+}
+
+applyFont();
+
+document.getElementById("fontPlus").onclick = () => {
+
+  size += 2;
+
+  localStorage.setItem("hadithFont", size);
+
+  applyFont();
+
+};
+
+document.getElementById("fontMinus").onclick = () => {
+
+  if(size > 20){
+
+    size -= 2;
+
+    localStorage.setItem("hadithFont", size);
+
+    applyFont();
+
+  }
+
+};
+
+console.log("✅ Hadith Reader Part 5 Loaded");
