@@ -280,3 +280,81 @@ document.getElementById("fontMinus").onclick = () => {
 };
 
 console.log("✅ Hadith Reader Part 5 Loaded");
+
+// ======================================
+// PART 6
+// DARK MODE + READING HISTORY + PROGRESS
+// ======================================
+
+// Dark Mode
+const darkBtn = document.createElement("button");
+
+darkBtn.className = "hero-btn";
+darkBtn.innerHTML =
+localStorage.getItem("hadithTheme") === "dark"
+? "☀️ Light"
+: "🌙 Dark";
+
+document.getElementById("favBtn")
+.insertAdjacentElement("afterend", darkBtn);
+
+if(localStorage.getItem("hadithTheme")==="dark"){
+    document.body.classList.add("dark-mode");
+}
+
+darkBtn.onclick = ()=>{
+
+    document.body.classList.toggle("dark-mode");
+
+    const dark =
+    document.body.classList.contains("dark-mode");
+
+    localStorage.setItem(
+        "hadithTheme",
+        dark ? "dark" : "light"
+    );
+
+    darkBtn.innerHTML =
+    dark ? "☀️ Light" : "🌙 Dark";
+
+};
+
+// Reading History
+let history =
+JSON.parse(localStorage.getItem("hadithHistory")) || [];
+
+history.unshift({
+    id:id,
+    title:title.innerText,
+    date:new Date().toLocaleString()
+});
+
+history = history.slice(0,20);
+
+localStorage.setItem(
+    "hadithHistory",
+    JSON.stringify(history)
+);
+
+// Reading Progress
+let progress =
+Number(localStorage.getItem("hadithProgress")) || 0;
+
+if(progress < hadiths.length){
+
+    progress++;
+
+    localStorage.setItem(
+        "hadithProgress",
+        progress
+    );
+
+}
+
+// Last Read Hadith
+localStorage.setItem(
+    "lastHadith",
+    id
+);
+
+console.log("✅ Hadith Reader Part 6 Loaded");
